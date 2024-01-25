@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppService } from '../app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configurations } from './config/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DbConfigKey, IDbConfig } from './config/database.config';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { DbConfigKey, IDbConfig } from './config/database.config';
         };
       },
     }),
+    UserModule,
+    AuthModule,
   ],
-  providers: [AppService],
 })
 export class AppModule {}
