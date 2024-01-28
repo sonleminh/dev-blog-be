@@ -5,6 +5,8 @@ import { AppConfigKey, IAppConfig } from '../config/app.config';
 import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
 import { ValidationConfig } from '../config/validation.config';
+import * as cookieParser from 'cookie-parser';
+import { AuthConfigKey, IAuthConfig } from '../config/auth.config';
 
 export class App {
   public static async start(module: any) {
@@ -20,6 +22,11 @@ export class App {
     app.use(helmet());
     app.setGlobalPrefix(appPrefix);
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
+    app.use(
+      cookieParser(
+        configService.get<IAuthConfig['CK_SECRET']>(AuthConfigKey.CK_SECRET),
+      ),
+    );
     await app.listen(configService.get<IAppConfig['PORT']>(AppConfigKey.PORT));
   }
 }

@@ -1,0 +1,22 @@
+import { registerAs } from '@nestjs/config';
+
+export enum AuthConfigKey {
+  AT_SECRET = 'AT_SECRET',
+  RT_SECRET = 'RT_SECRET',
+  CK_PATH = 'CK_PATH',
+  CK_SECRET = 'CK_SECRET',
+}
+
+export type IAuthConfig = {
+  [AuthConfigKey.AT_SECRET]: string;
+  [AuthConfigKey.RT_SECRET]: string;
+  [AuthConfigKey.CK_PATH]: string;
+  [AuthConfigKey.CK_SECRET]: string;
+};
+
+export default registerAs('', () => ({
+  [AuthConfigKey.AT_SECRET]: process.env[AuthConfigKey.AT_SECRET],
+  [AuthConfigKey.RT_SECRET]: process.env[AuthConfigKey.RT_SECRET],
+  [AuthConfigKey.CK_PATH]: process.env[AuthConfigKey.CK_PATH],
+  [AuthConfigKey.CK_SECRET]: process.env[AuthConfigKey.CK_SECRET],
+}));

@@ -2,9 +2,11 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { User, UserDocument } from './user.entity';
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { AuthCredentialsDto } from '../auth/dto/auth-credentials.dto';
@@ -32,6 +34,23 @@ export class UserService {
         throw new ConflictException('Username already exists');
       }
       throw new InternalServerErrorException();
+    }
+  }
+
+  async findAndVerify(authCredentialsDto: AuthCredentialsDto) {
+    try {
+      const { username, password } = authCredentialsDto;
+      const user = await this.userModel.findOne({ username });
+      if (!user) {
+        throw new NotFoundException('User does not exist');
+      }
+      const compare = await bcrypt.compare(password, user.password);
+      if (!compare) {
+        throw new BadRequestException('Password is not correct');
+      }
+      return user;
+    } catch (error) {
+      throw error;
     }
   }
 }
