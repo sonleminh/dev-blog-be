@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { User, UserDocument } from './user.entity';
 import {
@@ -14,6 +14,18 @@ import { AuthCredentialsDto } from '../auth/dto/auth-credentials.dto';
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+
+  async getUserById(id: Types.ObjectId) {
+    try {
+      const user = await this.userModel.findById(id);
+      if (!user) {
+        throw new NotFoundException();
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async createUser(authCredentialsDto: AuthCredentialsDto) {
     const { username, password } = authCredentialsDto;

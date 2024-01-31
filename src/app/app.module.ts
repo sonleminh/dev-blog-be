@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { DbConfigKey, IDbConfig } from './config/database.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
+import { ArticleModule } from './modules/article/article.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UserModule } from './modules/user/user.module';
     }),
     UserModule,
     AuthModule,
+    ArticleModule,
   ],
 })
 export class AppModule {}

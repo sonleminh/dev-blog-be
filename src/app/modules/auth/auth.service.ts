@@ -1,8 +1,10 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -14,6 +16,7 @@ import generateToken from './utils';
 import { ITokenPayload } from 'src/app/interfaces/ITokenPayload';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
+import { verify } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +31,42 @@ export class AuthService {
     this.ATSecret = this.configService.get('AT_SECRET');
     this.RTSecret = this.configService.get('RT_SECRET');
     this.CKPath = this.configService.get('CK_PATH');
+  }
+
+  async verifyToken(token: string, secret: string) {
+    try {
+      const decoded = verify(token, secret) as Partial<ITokenPayload>;
+      const user = await this.userService.getUserById(decoded._id);
+
+      if (!user) {
+        throw new ForbiddenException();
+      }
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async verifyAccessToken(accessToken: string): Promise<any> {
+    try {
+      const user = await this.verifyToken(accessToken, this.ATSecret);
+      return user;
+    } catch (error) {
+      if (error.name === 'TokenExpireedError') {
+        throw new UnauthorizedException();
+      }
+    }
+  }
+
+  async isTokenExpired(accessToken: string) {
+    try {
+      return false;
+    } catch (error) {
+      if (error && error.name === 'TokenExpiredError') {
+        return true;
+      }
+      throw error;
+    }
   }
 
   async signUp(authCredentialsDto: AuthCredentialsDto) {

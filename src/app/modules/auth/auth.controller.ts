@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from '../user/user.entity';
 import { Request, Response } from 'express';
+import { AuthGuard } from './guards/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
