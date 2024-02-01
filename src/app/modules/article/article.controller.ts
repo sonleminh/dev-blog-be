@@ -2,9 +2,7 @@ import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { CreateArticleDto } from './dto/article.dto';
 import { RequestExpress } from 'src/app/interfaces/exception-response.interface';
 import { ArticleService } from './article.service';
-import { AuthGuard } from '../auth/guards/auth.guard';
 
-@UseGuards(AuthGuard)
 @Controller('article')
 export class ArticleController {
   constructor(private articleService: ArticleService) {}

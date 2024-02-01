@@ -17,6 +17,7 @@ import { ITokenPayload } from 'src/app/interfaces/ITokenPayload';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -27,10 +28,33 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private configService: ConfigService,
+    private readonly jwtService: JwtService,
   ) {
     this.ATSecret = this.configService.get('AT_SECRET');
     this.RTSecret = this.configService.get('RT_SECRET');
     this.CKPath = this.configService.get('CK_PATH');
+  }
+
+  async validateUser(username: string, password: string) {
+    const userData = await this.userService.findAndVerify({
+      username,
+      password,
+    });
+    return userData
+  }
+
+  async generateJwtToken(
+    user: User,
+  ): Promise<{ name: string; accessToken: string }> {
+    const payload = {
+      name: user.name,
+      id_user: String(user._id),
+    }
+
+    return { 
+      name: user.name,
+      accessToken: await this.jwtService.signAsync(payload, {}),
+    }
   }
 
   async verifyToken(token: string, secret: string) {

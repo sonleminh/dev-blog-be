@@ -3,9 +3,8 @@ import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from '../user/user.entity';
 import { Request, Response } from 'express';
-import { AuthGuard } from './guards/auth.guard';
-
-@UseGuards(AuthGuard)
+import { API_ACTION } from 'src/app/enums/api-action.enum';
+import {LocalAuthGuard} from './guards/local-auth.guard'
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -13,7 +12,9 @@ export class AuthController {
   async signUp(@Body() authCredentialsDto: AuthCredentialsDto) {
     return this.authService.signUp(authCredentialsDto);
   }
-  @Post('/signin')
+
+  @UseGuards(LocalAuthGuard)
+  @Post(API_ACTION.LOGIN)
   async signIn(
     @Body() authCredentialsDto: AuthCredentialsDto,
     @Res({ passthrough: true }) res: Response,

@@ -15,6 +15,10 @@ import { AuthCredentialsDto } from '../auth/dto/auth-credentials.dto';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
+  async findOneByUsername(username: string) {
+    return this.userModel.find((user) => user.username === username);
+  }
+
   async getUserById(id: Types.ObjectId) {
     try {
       const user = await this.userModel.findById(id);
