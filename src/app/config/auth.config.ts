@@ -5,7 +5,8 @@ export enum AuthConfigKey {
   RT_SECRET = 'RT_SECRET',
   CK_PATH = 'CK_PATH',
   CK_SECRET = 'CK_SECRET',
-  JWT_SECRET_KEY = 'JWT_SECRET_KEY'
+  JWT_SECRET_KEY = 'JWT_SECRET_KEY',
+  RT_SECRET_KEY = 'RT_SECRET_KEY',
 }
 
 export type IAuthConfig = {
@@ -14,6 +15,7 @@ export type IAuthConfig = {
   [AuthConfigKey.CK_PATH]: string;
   [AuthConfigKey.CK_SECRET]: string;
   [AuthConfigKey.JWT_SECRET_KEY]: string;
+  [AuthConfigKey.RT_SECRET_KEY]: string;
 };
 
 export default registerAs('', () => ({
@@ -22,4 +24,5 @@ export default registerAs('', () => ({
   [AuthConfigKey.CK_PATH]: process.env[AuthConfigKey.CK_PATH],
   [AuthConfigKey.CK_SECRET]: process.env[AuthConfigKey.CK_SECRET],
   [AuthConfigKey.JWT_SECRET_KEY]: process.env[AuthConfigKey.JWT_SECRET_KEY],
+  [AuthConfigKey.RT_SECRET_KEY]: process.env[AuthConfigKey.RT_SECRET_KEY],
 }));

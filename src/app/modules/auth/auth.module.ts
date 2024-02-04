@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthConfigKey, IAuthConfig } from 'src/app/config/auth.config';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -19,12 +20,13 @@ import { LocalStrategy } from './strategies/local.strategy';
         secret: configService.get<IAuthConfig['JWT_SECRET_KEY']>(
           AuthConfigKey.JWT_SECRET_KEY,
         ),
+        signOptions: { expiresIn: '30s' },
       }),
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService,LocalStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
-  exports: [AuthService,LocalStrategy],
+  exports: [AuthService, LocalStrategy, JwtStrategy],
 })
 export class AuthModule {}

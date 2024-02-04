@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   BadRequestException,
   ForbiddenException,
@@ -18,6 +19,8 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
+import { RegisterDTO } from './dto/register.dto';
+import { AuthConfigKey, IAuthConfig } from 'src/app/config/auth.config';
 
 @Injectable()
 export class AuthService {
@@ -40,21 +43,54 @@ export class AuthService {
       username,
       password,
     });
-    return userData
+    return userData;
   }
 
   async generateJwtToken(
     user: User,
-  ): Promise<{ name: string; accessToken: string }> {
+    res: Response,
+  ): Promise<{ fullName: string; accessToken: string; refreshToken }> {
     const payload = {
-      name: user.name,
+      name: user.fullName,
       id_user: String(user._id),
-    }
+    };
 
-    return { 
-      name: user.name,
-      accessToken: await this.jwtService.signAsync(payload, {}),
+    return {
+      fullName: user.fullName,
+      accessToken: await this.jwtService.signAsync(payload, {
+        secret: this.configService.get<IAuthConfig['JWT_SECRET_KEY']>(
+          AuthConfigKey.JWT_SECRET_KEY,
+        ),
+        expiresIn: '15s',
+      }),
+      refreshToken: await this.jwtService.signAsync(payload, {
+        secret: this.configService.get<IAuthConfig['RT_SECRET_KEY']>(
+          AuthConfigKey.RT_SECRET_KEY,
+        ),
+        expiresIn: '7d',
+      }),
+    };
+  }
+
+  extractRefreshToken(req: Request) {
+    try {
+      const { rt } = req.signedCookies;
+      if (!rt) {
+        throw new ForbiddenException();
+      }
+
+      return rt as string;
+    } catch (error) {
+      throw error;
     }
+  }
+
+  async processRefreshToken(req: Request) {
+    try {
+      const refreshToken = this.extractRefreshToken(req);
+      console.log('refreshToken:', refreshToken);
+      return '1';
+    } catch (error) {}
   }
 
   async verifyToken(token: string, secret: string) {
@@ -93,28 +129,28 @@ export class AuthService {
     }
   }
 
-  async signUp(authCredentialsDto: AuthCredentialsDto) {
+  async signUp(registerDTO: RegisterDTO) {
     try {
-      return this.userService.createUser(authCredentialsDto);
+      return this.userService.createUser(registerDTO);
     } catch (error) {
       throw error;
     }
   }
 
-  async generateTokens(data: ITokenPayload) {
-    try {
-      const [AT, RT] = await Promise.all([
-        generateToken(data, this.ATSecret, { expiresIn: '7d' }),
-        generateToken({ _id: data._id }, this.RTSecret, { expiresIn: '7d' }),
-      ]);
-      return {
-        accessToken: AT,
-        refreshToken: RT,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException();
-    }
-  }
+  // async generateTokens(data: ITokenPayload) {
+  //   try {
+  //     const [AT, RT] = await Promise.all([
+  //       generateToken(data, this.ATSecret, { expiresIn: '7d' }),
+  //       generateToken({ _id: data._id }, this.RTSecret, { expiresIn: '7d' }),
+  //     ]);
+  //     return {
+  //       accessToken: AT,
+  //       refreshToken: RT,
+  //     };
+  //   } catch (error) {
+  //     throw new InternalServerErrorException();
+  //   }
+  // }
 
   storeRefreshToken(res: Response, refreshToken: string) {
     res.cookie('rt', refreshToken, {
@@ -126,18 +162,18 @@ export class AuthService {
     });
   }
 
-  async signIn(authCredentialsDto: AuthCredentialsDto, res: Response) {
-    try {
-      const user = await this.userService.findAndVerify(authCredentialsDto);
-      const { accessToken, refreshToken } = await this.generateTokens({
-        _id: user._id,
-        username: user.username,
-      });
-      this.storeRefreshToken(res, refreshToken);
-      const { password, ...tempUser } = user['_doc'];
-      return { accessToken, user: tempUser };
-    } catch (error) {
-      throw error;
-    }
-  }
+  // async signIn(res: Response) {
+  //   try {
+  //     const user = await this.userService.findAndVerify(authCredentialsDto);
+  //     const { accessToken, refreshToken } = await this.generateTokens({
+  //       _id: user._id,
+  //       username: user.username,
+  //     });
+  //     this.storeRefreshToken(res, refreshToken);
+  //     const { password, ...tempUser } = user['_doc'];
+  //     return { accessToken, user: tempUser };
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }

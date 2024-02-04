@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { AuthCredentialsDto } from '../auth/dto/auth-credentials.dto';
+import { RegisterDTO } from '../auth/dto/register.dto';
 
 @Injectable()
 export class UserService {
@@ -31,14 +32,12 @@ export class UserService {
     }
   }
 
-  async createUser(authCredentialsDto: AuthCredentialsDto) {
-    const { username, password } = authCredentialsDto;
+  async createUser(registerDTO: RegisterDTO) {
+    const { password, ...rest } = registerDTO;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await this.userModel.create({
-      username,
-      password: hashedPassword,
-    });
+    const data = { password: hashedPassword, ...rest };
+    const user = await this.userModel.create(data);
 
     try {
       const userData = await user.save();
