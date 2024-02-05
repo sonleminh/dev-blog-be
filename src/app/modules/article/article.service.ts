@@ -11,12 +11,17 @@ export class ArticleService {
     @InjectModel(Article.name) private articleModel: Model<ArticleDocument>,
   ) {}
 
-  async createArticle(createArticleDTO: CreateArticleDto, user: UserDocument) {
+  async createArticle(createArticleDTO: CreateArticleDto, id_user: string) {
+    // async createArticle(createArticleDTO: CreateArticleDto) {
     try {
-      const payload = { ...createArticleDTO, ...{ user: user._id } };
+      const payload = { ...createArticleDTO, ...{ id_user: id_user } };
+      // console.log('1:', payload);
+      // console.log(createArticleDTO);
+      // return await this.articleModel.create(createArticleDTO);
       return await this.articleModel.create(payload);
     } catch (error) {
-      throw new BadRequestException(error);
+      // throw new BadRequestException(error);
+      throw error;
     }
   }
 }

@@ -7,7 +7,7 @@ import { User } from '../../user/user.entity';
 export type ArticleDocument = HydratedDocument<Article>;
 
 @Schema({ collection: 'articles', timestamps: true })
-export class Article extends CommonEntity {
+export class Article {
   @Transform(({ value }) => value.toString(), { toPlainOnly: true })
   _id: Types.ObjectId;
 

@@ -1,4 +1,7 @@
 import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
+import { Types } from 'mongoose';
+import { User } from '../../user/user.entity';
+import { Prop } from '@nestjs/mongoose';
 
 export class CreateArticleDto {
   @IsNotEmpty({ message: 'Nội dung này không được để trống!' })
@@ -13,16 +16,21 @@ export class CreateArticleDto {
 
   @IsNotEmpty({ message: 'Nội dung này không được để trống!' })
   @IsString()
-  @Length(1, 10000, { message: 'Độ dài đoạn tóm tắt từ 1-1000 ký tự!' })
+  @Length(1, 1000, { message: 'Độ dài đoạn tóm tắt từ 1-1000 ký tự!' })
   summary: string;
 
   @IsNotEmpty({ message: 'Nội dung này không được để trống!' })
   @IsString()
-  @Length(0)
+  @Length(1, 10000, { message: 'Độ dài đoạn tóm tắt từ 1-10000 ký tự!' })
   content: string;
 
   @IsOptional()
   @IsString()
   @Length(0)
   thumbnail: string;
+
+  @IsOptional()
+  @IsString()
+  @Length(0)
+  id_slug: string;
 }

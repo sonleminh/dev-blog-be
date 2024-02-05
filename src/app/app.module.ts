@@ -7,6 +7,7 @@ import { DbConfigKey, IDbConfig } from './config/database.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { ArticleModule } from './modules/article/article.module';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { ArticleModule } from './modules/article/article.module';
     UserModule,
     AuthModule,
     ArticleModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}

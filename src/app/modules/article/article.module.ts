@@ -10,7 +10,7 @@ import { ArticleController } from './article.controller';
     MongooseModule.forFeature([{ name: Article.name, schema: ArticleSchema }]),
     forwardRef(() => AuthModule),
   ],
-  providers: [ArticleService],
   controllers: [ArticleController],
+  providers: [ArticleService],
 })
 export class ArticleModule {}
