@@ -46,6 +46,16 @@ export class AuthService {
     return userData;
   }
 
+  storeRefreshToken(res: Response, refreshToken: string) {
+    res.cookie('rt',refreshToken, {
+      sameSite: 'none',
+      signed: true,
+      httpOnly: true,
+      secure: true,
+      path: this.CKPath,
+    })
+  }
+
   async generateJwtToken(
     user: User,
     res: Response,
@@ -55,30 +65,35 @@ export class AuthService {
       id_user: String(user._id),
     };
 
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: this.configService.get<IAuthConfig['JWT_SECRET_KEY']>(
+        AuthConfigKey.JWT_SECRET_KEY,
+      ),
+      expiresIn: '3600s',
+    })
+    const refreshToken =  await this.jwtService.signAsync(payload, {
+      secret: this.configService.get<IAuthConfig['RT_SECRET_KEY']>(
+        AuthConfigKey.RT_SECRET_KEY,
+      ),
+      expiresIn: '7d',
+    })
+
+    this.storeRefreshToken(res,refreshToken)
+
     return {
       fullName: user.fullName,
-      accessToken: await this.jwtService.signAsync(payload, {
-        secret: this.configService.get<IAuthConfig['JWT_SECRET_KEY']>(
-          AuthConfigKey.JWT_SECRET_KEY,
-        ),
-        expiresIn: '15s',
-      }),
-      refreshToken: await this.jwtService.signAsync(payload, {
-        secret: this.configService.get<IAuthConfig['RT_SECRET_KEY']>(
-          AuthConfigKey.RT_SECRET_KEY,
-        ),
-        expiresIn: '7d',
-      }),
+      accessToken: accessToken,
+      refreshToken: refreshToken
     };
   }
 
   extractRefreshToken(req: Request) {
     try {
       const { rt } = req.signedCookies;
+
       if (!rt) {
         throw new ForbiddenException();
       }
-
       return rt as string;
     } catch (error) {
       throw error;
@@ -88,9 +103,9 @@ export class AuthService {
   async processRefreshToken(req: Request) {
     try {
       const refreshToken = this.extractRefreshToken(req);
-      console.log('refreshToken:', refreshToken);
+      // console.log('refreshToken:', refreshToken);
       return '1';
-    } catch (error) {}
+    } catch (error) {throw error}
   }
 
   async verifyToken(token: string, secret: string) {
@@ -151,16 +166,6 @@ export class AuthService {
   //     throw new InternalServerErrorException();
   //   }
   // }
-
-  storeRefreshToken(res: Response, refreshToken: string) {
-    res.cookie('rt', refreshToken, {
-      sameSite: 'none',
-      signed: true,
-      httpOnly: true,
-      secure: true,
-      path: this.CKPath,
-    });
-  }
 
   // async signIn(res: Response) {
   //   try {
