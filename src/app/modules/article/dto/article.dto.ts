@@ -27,10 +27,14 @@ export class CreateArticleDto {
   @IsOptional()
   @IsString()
   @Length(0)
-  thumbnail: string;
+  thumbnail_image: string;
 
   @IsOptional()
   @IsString()
   @Length(0)
   id_slug: string;
+
+  @IsString()
+  @Length(0)
+  id_category: string;
 }

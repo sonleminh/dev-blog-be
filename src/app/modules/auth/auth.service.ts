@@ -61,7 +61,7 @@ export class AuthService {
         secret: this.configService.get<IAuthConfig['JWT_SECRET_KEY']>(
           AuthConfigKey.JWT_SECRET_KEY,
         ),
-        expiresIn: '3600s',
+        // expiresIn: '3600s',
       }),
       refreshToken: await this.jwtService.signAsync(payload, {
         secret: this.configService.get<IAuthConfig['RT_SECRET_KEY']>(

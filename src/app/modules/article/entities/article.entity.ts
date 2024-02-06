@@ -3,6 +3,7 @@ import { Transform } from 'class-transformer';
 import { HydratedDocument, Types } from 'mongoose';
 import { CommonEntity } from 'src/app/entities/common.entity';
 import { User } from '../../user/user.entity';
+import { Category } from '../../category/entities/category.entity';
 
 export type ArticleDocument = HydratedDocument<Article>;
 
@@ -31,6 +32,9 @@ export class Article {
 
   @Prop({ unique: true })
   id_slug: string;
+
+  @Prop({ type: Types.ObjectId, ref: Category.name })
+  id_category: string;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);
