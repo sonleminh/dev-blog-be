@@ -31,6 +31,13 @@ export class App {
     app.useStaticAssets(path.join(__dirname, '..', 'assets'), {
       prefix: `${apiPrefix}/assets`,
     });
-    await app.listen(configService.get<IAppConfig['PORT']>(AppConfigKey.PORT));
+    await app.listen(
+      configService.get<IAppConfig['PORT']>(AppConfigKey.PORT),
+      async () => {
+        console.log(
+          `The server is running with ${configService.get<IAppConfig['PORT']>(AppConfigKey.PORT)}`,
+        );
+      },
+    );
   }
 }
