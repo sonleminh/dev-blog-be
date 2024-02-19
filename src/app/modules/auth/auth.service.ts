@@ -89,7 +89,6 @@ export class AuthService {
   async processRefreshToken(req: Request) {
     try {
       const refreshToken = this.extractRefreshToken(req);
-      console.log('refreshToken:', refreshToken);
       return '1';
     } catch (error) {
       throw error;

@@ -5,16 +5,6 @@ import sharp = require('sharp');
 import { mkdirp } from 'mkdirp';
 
 export const getStaticAssetPath = (...paths: string[]) => {
-  // console.log(
-  //   decodeURIComponent(
-  //     path.resolve(
-  //       __dirname,
-  //       '..',
-  //       'assets',
-  //       ...paths.map((str) => String(str)),
-  //     ),
-  //   ),
-  // );
   return decodeURIComponent(
     path.resolve(__dirname, '..', 'assets', ...paths.map((str) => String(str))),
   );

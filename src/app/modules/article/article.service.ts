@@ -16,12 +16,8 @@ export class ArticleService {
     // async createArticle(createArticleDTO: CreateArticleDto) {
     try {
       const payload = { ...createArticleDTO, ...{ id_user: id_user } };
-      // console.log('1:', payload);
-      // console.log(createArticleDTO);
-      // return await this.articleModel.create(createArticleDTO);
       return await this.articleModel.create(payload);
     } catch (error) {
-      // throw new BadRequestException(error);
       throw error;
     }
   }
