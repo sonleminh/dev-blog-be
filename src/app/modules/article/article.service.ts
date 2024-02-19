@@ -27,6 +27,6 @@ export class ArticleService {
   }
 
   async create(thumbnail_image: Express.Multer.File) {
-    console.log(await compressAndSaveImage(thumbnail_image));
+    return await compressAndSaveImage(thumbnail_image);
   }
 }
