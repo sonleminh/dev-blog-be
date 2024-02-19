@@ -4,6 +4,7 @@ import { Article, ArticleDocument } from './entities/article.entity';
 import { Model } from 'mongoose';
 import { CreateArticleDto } from './dto/article.dto';
 import { UserDocument } from '../user/user.entity';
+import { CompressAndSaveImage } from '../auth/utils/fs.util';
 
 @Injectable()
 export class ArticleService {
@@ -23,5 +24,9 @@ export class ArticleService {
       // throw new BadRequestException(error);
       throw error;
     }
+  }
+
+  async create(thumbnail_image: Express.Multer.File) {
+    CompressAndSaveImage(thumbnail_image)
   }
 }
