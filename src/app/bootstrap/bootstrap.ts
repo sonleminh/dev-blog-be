@@ -7,6 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ValidationConfig } from '../config/validation.config';
 import * as cookieParser from 'cookie-parser';
 import { AuthConfigKey, IAuthConfig } from '../config/auth.config';
+import path = require('path');
 
 export class App {
   public static async start(module: any) {
@@ -16,17 +17,20 @@ export class App {
 
   public static async setup(app: NestExpressApplication) {
     const configService = app.get(ConfigService);
-    const appPrefix = configService.get<IAppConfig['API_PREFIX']>(
+    const apiPrefix = configService.get<IAppConfig['API_PREFIX']>(
       AppConfigKey.APP_PREFIX,
     );
     app.use(helmet());
-    app.setGlobalPrefix(appPrefix);
+    app.setGlobalPrefix(apiPrefix);
     app.useGlobalPipes(new ValidationPipe(ValidationConfig));
     app.use(
       cookieParser(
         configService.get<IAuthConfig['CK_SECRET']>(AuthConfigKey.CK_SECRET),
       ),
     );
+    app.useStaticAssets(path.join(__dirname, '..', 'assets'), {
+      prefix: `${apiPrefix}/assets`,
+    });
     await app.listen(configService.get<IAppConfig['PORT']>(AppConfigKey.PORT));
   }
 }

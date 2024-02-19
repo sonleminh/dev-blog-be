@@ -13,7 +13,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from '../user/user.entity';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import generateToken from './utils';
+import generateToken from '../../utils';
 import { ITokenPayload } from 'src/app/interfaces/ITokenPayload';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
