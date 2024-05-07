@@ -20,7 +20,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         secret: configService.get<IAuthConfig['JWT_SECRET_KEY']>(
           AuthConfigKey.JWT_SECRET_KEY,
         ),
-        signOptions: { expiresIn: '30s' },
+        signOptions: { expiresIn: '3600s' },
       }),
       inject: [ConfigService],
     }),
