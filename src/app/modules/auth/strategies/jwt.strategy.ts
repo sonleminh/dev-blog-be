@@ -8,6 +8,7 @@ import { AuthConfigKey, IAuthConfig } from 'src/app/config/auth.config';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly configService: ConfigService) {
     super({
+      // jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService.get<IAuthConfig['JWT_SECRET_KEY']>(

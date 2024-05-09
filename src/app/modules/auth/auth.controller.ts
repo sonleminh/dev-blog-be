@@ -40,8 +40,8 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   async getProfile(@Request() req) {
-    console.log(req);
-    return req.user;
+    return this.authService.profile(req);
+    // return req.user;
   }
 
   @Get('refresh-token')

@@ -164,6 +164,11 @@ export class AuthService {
     });
   }
 
+  profile(req: Request) {
+    console.log(req.cookies);
+    return 0;
+  }
+
   // async signIn(res: Response) {
   //   try {
   //     const user = await this.userService.findAndVerify(authCredentialsDto);
