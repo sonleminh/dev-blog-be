@@ -165,7 +165,7 @@ export class AuthService {
   }
 
   profile(req: Request) {
-    console.log(req.cookies);
+    // console.log(req.cookies);
     return 0;
   }
 

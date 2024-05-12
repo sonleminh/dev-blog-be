@@ -16,6 +16,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RegisterDTO } from './dto/register.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
+// @UseGuards(JwtAuthGuard)
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -40,12 +41,18 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   async getProfile(@Request() req) {
-    return this.authService.profile(req);
-    // return req.user;
+    // return this.authService.profile(req);
+    return req.user;
   }
 
   @Get('refresh-token')
   async refreshToken(@Request() req) {
     return this.authService.processRefreshToken(req);
+  }
+
+  @Get('signout')
+  async signout(@Res({ passthrough: true }) res) {
+    res.cookie('sessionToken', '', { expires: new Date(Date.now()) });
+    return {};
   }
 }
