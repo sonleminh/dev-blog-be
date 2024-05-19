@@ -30,7 +30,12 @@ export class AuthController {
   async signIn(
     @Request() req,
     @Res({ passthrough: true }) res,
-  ): Promise<{ fullName: string; accessToken: string; refreshToken: string }> {
+  ): Promise<{
+    id: string;
+    fullName: string;
+    accessToken: string;
+    refreshToken: string;
+  }> {
     // @Body() authCredentialsDto: AuthCredentialsDto,
     // @Res({ passthrough: true }) res: Response,
     // console.log('1:', req.user);

@@ -49,13 +49,19 @@ export class AuthService {
   async generateJwtToken(
     user: User,
     res: Response,
-  ): Promise<{ fullName: string; accessToken: string; refreshToken }> {
+  ): Promise<{
+    id: any;
+    fullName: string;
+    accessToken: string;
+    refreshToken;
+  }> {
     const payload = {
       name: user.fullName,
       id_user: String(user._id),
     };
 
     return {
+      id: String(user._id),
       fullName: user.fullName,
       accessToken: await this.jwtService.signAsync(payload, {
         secret: this.configService.get<IAuthConfig['JWT_SECRET_KEY']>(
