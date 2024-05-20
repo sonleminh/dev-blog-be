@@ -31,8 +31,8 @@ export class AuthController {
     @Request() req,
     @Res({ passthrough: true }) res,
   ): Promise<{
-    id: string;
-    fullName: string;
+    message: string;
+    user: { id: string; name: string };
     accessToken: string;
     refreshToken: string;
   }> {

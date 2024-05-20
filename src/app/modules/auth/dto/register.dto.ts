@@ -25,5 +25,5 @@ export class RegisterDTO {
   @IsNotEmpty()
   @Transform(({ value }: TransformFnParams) => value?.trim())
   @MinLength(4)
-  fullName: string;
+  name: string;
 }

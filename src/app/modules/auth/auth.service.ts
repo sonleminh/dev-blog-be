@@ -50,19 +50,22 @@ export class AuthService {
     user: User,
     res: Response,
   ): Promise<{
-    id: any;
-    fullName: string;
+    message: string;
+    user: {
+      id: any;
+      name: string;
+    };
     accessToken: string;
     refreshToken;
   }> {
     const payload = {
-      name: user.fullName,
+      name: user.name,
       id_user: String(user._id),
     };
 
     return {
-      id: String(user._id),
-      fullName: user.fullName,
+      message: 'Login successful',
+      user: { id: String(user._id), name: user.name },
       accessToken: await this.jwtService.signAsync(payload, {
         secret: this.configService.get<IAuthConfig['JWT_SECRET_KEY']>(
           AuthConfigKey.JWT_SECRET_KEY,
