@@ -32,9 +32,12 @@ export class AuthController {
     @Res({ passthrough: true }) res,
   ): Promise<{
     message: string;
-    user: { id: string; name: string };
-    accessToken: string;
-    refreshToken: string;
+    user: {
+      id: string;
+      name: string;
+      accessToken: string;
+      refreshToken: string;
+    };
   }> {
     // @Body() authCredentialsDto: AuthCredentialsDto,
     // @Res({ passthrough: true }) res: Response,

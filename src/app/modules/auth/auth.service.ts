@@ -54,9 +54,9 @@ export class AuthService {
     user: {
       id: any;
       name: string;
+      accessToken: string;
+      refreshToken;
     };
-    accessToken: string;
-    refreshToken;
   }> {
     const payload = {
       name: user.name,
@@ -65,19 +65,22 @@ export class AuthService {
 
     return {
       message: 'Login successful',
-      user: { id: String(user._id), name: user.name },
-      accessToken: await this.jwtService.signAsync(payload, {
-        secret: this.configService.get<IAuthConfig['JWT_SECRET_KEY']>(
-          AuthConfigKey.JWT_SECRET_KEY,
-        ),
-        // expiresIn: '3600s',
-      }),
-      refreshToken: await this.jwtService.signAsync(payload, {
-        secret: this.configService.get<IAuthConfig['RT_SECRET_KEY']>(
-          AuthConfigKey.RT_SECRET_KEY,
-        ),
-        expiresIn: '7d',
-      }),
+      user: {
+        id: String(user._id),
+        name: user.name,
+        accessToken: await this.jwtService.signAsync(payload, {
+          secret: this.configService.get<IAuthConfig['JWT_SECRET_KEY']>(
+            AuthConfigKey.JWT_SECRET_KEY,
+          ),
+          // expiresIn: '3600s',
+        }),
+        refreshToken: await this.jwtService.signAsync(payload, {
+          secret: this.configService.get<IAuthConfig['RT_SECRET_KEY']>(
+            AuthConfigKey.RT_SECRET_KEY,
+          ),
+          expiresIn: '7d',
+        }),
+      },
     };
   }
 
