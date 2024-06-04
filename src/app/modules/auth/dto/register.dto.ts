@@ -2,6 +2,7 @@ import { Transform, TransformFnParams } from 'class-transformer';
 import {
   IsLowercase,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Length,
   MinLength,
@@ -26,4 +27,9 @@ export class RegisterDTO {
   @Transform(({ value }: TransformFnParams) => value?.trim())
   @MinLength(4)
   name: string;
+
+  @IsOptional()
+  @IsString()
+  @Transform(({ value }: TransformFnParams) => value?.trim())
+  role: string;
 }
