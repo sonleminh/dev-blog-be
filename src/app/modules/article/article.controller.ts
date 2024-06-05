@@ -7,6 +7,7 @@ import {
   Post,
   Request,
   UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -39,11 +40,13 @@ export class ArticleController {
   async createArticle(
     @AuthUser() { id_user },
     @Body() createArticleDTO: CreateArticleDto,
+    @UploadedFiles()
+    files: { thumbnail_image: Express.Multer.File[] }
     // @Request() req: RequestExpress,
   ) {
     // const user = req.user;
     // if (!user) throw new Error('User not found');
-    return await this.articleService.createArticle(createArticleDTO, id_user);
+    return await this.articleService.createArticle(createArticleDTO,files?.thumbnail_image[0], id_user);
     // return await this.articleService.createArticle(createArticleDTO);
   }
 

@@ -30,15 +30,20 @@ export class ArticleService {
     }
   }
 
-  async createArticle(createArticleDTO: CreateArticleDto, id_user: string) {
+  async createArticle(
+    createArticleDTO: CreateArticleDto,
+    thumbnail_image: Express.Multer.File,
+    id_user: string,
+  ) {
     // async createArticle(createArticleDTO: CreateArticleDto) {
     try {
-      console.log(createArticleDTO)
-      const payload = {
-        ...createArticleDTO,
-        ...{ id_user: id_user, id_slug: `${createArticleDTO.title}-123` },
-      };
-      return await this.articleModel.create(payload);
+      // console.log(createArticleDTO),
+      console.log(thumbnail_image)
+      // const payload = {
+      //   ...createArticleDTO,
+      //   ...{ id_user: id_user, id_slug: `${createArticleDTO.title}-123` },
+      // };
+      // return await this.articleModel.create(payload);
     } catch (error) {
       throw error;
     }
