@@ -23,35 +23,40 @@ import { Types } from 'mongoose';
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
+  @UseGuards(JwtAuthGuard)
   async getArticleList(){
     return this.articleService.getArticleList();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async getArticleById(@Param('id') id: Types.ObjectId){
     return this.articleService.getArticleById(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('/')
+  @UseGuards(JwtAuthGuard)
+  // @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('thumbnail_image'))
   async createArticle(
     @AuthUser() { id_user },
-    @Body() createArticleDTO: CreateArticleDto,
-    @UploadedFiles()
-    files: { thumbnail_image: Express.Multer.File[] }
-    // @Request() req: RequestExpress,
+    @Body() createArticleDTO: any,
+    @UploadedFile() thumbnail_image: Express.Multer.File
+    // @UploadedFiles() files: { thumbnail_image: Express.Multer.File[] }
   ) {
     // const user = req.user;
     // if (!user) throw new Error('User not found');
-    return await this.articleService.createArticle(createArticleDTO,files?.thumbnail_image[0], id_user);
-    // return await this.articleService.createArticle(createArticleDTO);
+    // console.log('file:', file);
+    return await this.articleService.createArticle(
+      createArticleDTO,
+      thumbnail_image,
+      id_user,
+    );
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   async updateArticle(
     @Body() updateArticleDTO: UpdateArticleDto,
     @Param() { id }: { id: Types.ObjectId },

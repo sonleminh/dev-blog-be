@@ -37,8 +37,9 @@ export class ArticleService {
   ) {
     // async createArticle(createArticleDTO: CreateArticleDto) {
     try {
-      // console.log(createArticleDTO),
       console.log(thumbnail_image)
+      // return file;
+      // console.log('image:', thumbnail_image);
       // const payload = {
       //   ...createArticleDTO,
       //   ...{ id_user: id_user, id_slug: `${createArticleDTO.title}-123` },
