@@ -3,13 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Article, ArticleDocument } from './entities/article.entity';
 import { Model, Types } from 'mongoose';
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
-import { UserDocument } from '../user/user.entity';
-import { compressAndSaveImage } from '../../utils/fs.util';
+import { FirebaseRepository } from '../firebase/firebase.repository';
+import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectModel(Article.name) private articleModel: Model<ArticleDocument>,
+    private readonly firebaseService: FirebaseService
   ) {}
 
   async getArticleList() {
@@ -37,7 +38,9 @@ export class ArticleService {
   ) {
     // async createArticle(createArticleDTO: CreateArticleDto) {
     try {
-      console.log(thumbnail_image)
+      this.firebaseService.testlog()
+      // console.log(thumbnail_image)
+      // return await this.firebaseService.uploadFile(thumbnail_image)
       // return file;
       // console.log('image:', thumbnail_image);
       // const payload = {
