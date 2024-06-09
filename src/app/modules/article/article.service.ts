@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Article, ArticleDocument } from './entities/article.entity';
 import { Model, Types } from 'mongoose';
@@ -10,24 +14,24 @@ import { FirebaseService } from '../firebase/firebase.service';
 export class ArticleService {
   constructor(
     @InjectModel(Article.name) private articleModel: Model<ArticleDocument>,
-    private readonly firebaseService: FirebaseService
+    private readonly firebaseService: FirebaseService,
   ) {}
 
   async getArticleList() {
     try {
-      const articleList = await this.articleModel.find()
+      const articleList = await this.articleModel.find();
       return { articleList: articleList };
     } catch (error) {
-      throw new BadRequestException(error)
+      throw new BadRequestException(error);
     }
   }
 
   async getArticleById(id: Types.ObjectId) {
     try {
-      const article = await this.articleModel.findById(id)
+      const article = await this.articleModel.findById(id);
       return { article: article };
     } catch (error) {
-      throw new NotFoundException('Không tìm thấy bài viết!')
+      throw new NotFoundException('Không tìm thấy bài viết!');
     }
   }
 
@@ -36,23 +40,20 @@ export class ArticleService {
     thumbnail_image: Express.Multer.File,
     id_user: string,
   ) {
-    // async createArticle(createArticleDTO: CreateArticleDto) {
     try {
-      this.firebaseService.testlog()
-      // console.log(thumbnail_image)
-      // return await this.firebaseService.uploadFile(thumbnail_image)
-      // return file;
-      // console.log('image:', thumbnail_image);
-      // const payload = {
-      //   ...createArticleDTO,
-      //   ...{ id_user: id_user, id_slug: `${createArticleDTO.title}-123` },
-      // };
-      // return await this.articleModel.create(payload);
+      const imageUrl = await this.firebaseService.uploadFile(thumbnail_image);
+
+      const payload = {
+        ...createArticleDTO,
+        ...{ id_user: id_user, id_slug: `${createArticleDTO.title}-123` },
+        thumbnail_image: imageUrl,
+      };
+      return await this.articleModel.create(payload);
     } catch (error) {
       throw error;
     }
   }
-  
+
   async updateArticle(updateArticleDTO: UpdateArticleDto, id: Types.ObjectId) {
     try {
       return await this.articleModel
@@ -61,7 +62,7 @@ export class ArticleService {
     } catch (error) {
       throw new BadRequestException(error);
     }
-  };
+  }
 
   // async create(thumbnail_image: Express.Multer.File) {
   //   return await compressAndSaveImage(thumbnail_image);

@@ -24,11 +24,6 @@ export class CreateArticleDto {
   @Length(1, 10000, { message: 'Độ dài đoạn tóm tắt từ 1-10000 ký tự!' })
   content: string;
 
-  @IsNotEmpty({ message: 'Nội dung này không được để trống!' })
-  @IsString()
-  @Length(0)
-  thumbnail_image: string;
-
   @IsString()
   @Length(0)
   id_category: string;
@@ -54,11 +49,6 @@ export class UpdateArticleDto {
   @IsString()
   @Length(1, 10000, { message: 'Độ dài đoạn tóm tắt từ 1-10000 ký tự!' })
   content: string;
-
-  @IsOptional()
-  @IsString()
-  @Length(0)
-  thumbnail_image: string;
 
   @IsOptional()
   @IsString()
