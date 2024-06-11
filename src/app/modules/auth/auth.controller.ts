@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Post,
   Req,
   Request,
@@ -50,6 +51,9 @@ export class AuthController {
   @Get('profile')
   async getProfile(@Request() req) {
     // return this.authService.profile(req);
+    if (!req.user) {
+      throw new NotFoundException('Not Found User!');
+    }
     return req.user;
   }
 

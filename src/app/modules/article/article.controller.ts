@@ -23,7 +23,7 @@ import { Types } from 'mongoose';
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   async getArticleList() {
     return this.articleService.getArticleList();
