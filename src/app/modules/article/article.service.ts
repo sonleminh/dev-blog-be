@@ -42,7 +42,6 @@ export class ArticleService {
   ) {
     try {
       const imageUrl = await this.firebaseService.uploadFile(thumbnail_image);
-
       const payload = {
         ...createArticleDTO,
         ...{ id_user: id_user, id_slug: `${createArticleDTO.title}-123` },

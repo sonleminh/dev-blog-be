@@ -27,6 +27,9 @@ export class CreateArticleDto {
   @IsString()
   @Length(0)
   id_category: string;
+
+  @IsOptional()
+  thumbnail_image?: string | null;
 }
 
 export class UpdateArticleDto {

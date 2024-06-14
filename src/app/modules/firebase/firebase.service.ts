@@ -49,9 +49,19 @@ export class FirebaseService {
         reject(error);
       });
 
-      stream.on('finish', () => {
-        const imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-        resolve(imageUrl);
+      stream.on('finish', async () => {
+        // const imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+        // resolve(imageUrl);
+        try {
+          // Đặt quyền công khai cho file
+          await fileUpload.makePublic();
+          
+          // Lấy URL tải xuống
+          const imageUrl = fileUpload.publicUrl();
+          resolve(imageUrl);
+        } catch (error) {
+          reject(error);
+        }
       });
 
       stream.end(file.buffer);
