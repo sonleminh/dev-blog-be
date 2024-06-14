@@ -54,12 +54,18 @@ export class ArticleController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('thumbnail_image'))
   @Patch(':id')
   async updateArticle(
-    @Body() updateArticleDTO: UpdateArticleDto,
     @Param() { id }: { id: Types.ObjectId },
+    @Body() updateArticleDTO: UpdateArticleDto,
+    @UploadedFile() thumbnail_image: Express.Multer.File,
   ) {
-    return await this.articleService.updateArticle(updateArticleDTO, id);
+    return await this.articleService.updateArticle(
+      id,
+      updateArticleDTO,
+      thumbnail_image,
+    );
   }
 
   // @Post('/upload')

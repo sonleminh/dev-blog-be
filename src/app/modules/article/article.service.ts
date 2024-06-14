@@ -29,7 +29,7 @@ export class ArticleService {
   async getArticleById(id: Types.ObjectId) {
     try {
       const article = await this.articleModel.findById(id);
-      return { article: article };
+      return article ;
     } catch (error) {
       throw new NotFoundException('Không tìm thấy bài viết!');
     }
@@ -53,10 +53,35 @@ export class ArticleService {
     }
   }
 
-  async updateArticle(updateArticleDTO: UpdateArticleDto, id: Types.ObjectId) {
+  async updateArticle(
+    id: Types.ObjectId,
+    body: UpdateArticleDto,
+    thumbnail_image: Express.Multer.File,
+  ) {
     try {
+      // return await this.articleModel
+      //   .findByIdAndUpdate(id, updateArticleDTO, { new: true })
+      //   .exec();
+      const entity = await this.articleModel.findById(id).lean();
+
+      if (!entity) {
+        throw new NotFoundException('Đối tượng không tồn tại!!');
+      }
+
+      let newData: Article = { ...entity, ...body };
+
+      if (thumbnail_image) {
+        const imageUrl = await this.firebaseService.uploadFile(thumbnail_image);
+        newData = {
+          ...newData,
+          thumbnail_image: imageUrl,
+        };
+      }
+
       return await this.articleModel
-        .findByIdAndUpdate(id, updateArticleDTO, { new: true })
+        .findByIdAndUpdate(id, newData, {
+          new: true,
+        })
         .exec();
     } catch (error) {
       throw new BadRequestException(error);
