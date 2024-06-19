@@ -35,6 +35,9 @@ export class Article {
 
   @Prop({ type: Types.ObjectId, ref: Category.name })
   id_category: string;
+
+  @Prop({ default: false })
+  is_deleted: boolean;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

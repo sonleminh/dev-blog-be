@@ -50,12 +50,9 @@ export class FirebaseService {
       });
 
       stream.on('finish', async () => {
-        // const imageUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-        // resolve(imageUrl);
         try {
           // Đặt quyền công khai cho file
           await fileUpload.makePublic();
-          
           // Lấy URL tải xuống
           const imageUrl = fileUpload.publicUrl();
           resolve(imageUrl);

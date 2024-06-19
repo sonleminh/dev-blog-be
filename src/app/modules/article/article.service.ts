@@ -19,8 +19,14 @@ export class ArticleService {
 
   async getArticleList() {
     try {
-      const articleList = await this.articleModel.find();
-      return { articleList: articleList };
+      const key = { is_deleted: { $ne: true } };
+      const filterObject = { ...key };
+
+      const [res, total] = await Promise.all([
+        this.articleModel.find(filterObject).lean().exec(),
+        this.articleModel.countDocuments(filterObject)
+      ]);
+      return { articleList: res, total };
     } catch (error) {
       throw new BadRequestException(error);
     }
@@ -29,7 +35,7 @@ export class ArticleService {
   async getArticleById(id: Types.ObjectId) {
     try {
       const article = await this.articleModel.findById(id);
-      return article ;
+      return article;
     } catch (error) {
       throw new NotFoundException('Không tìm thấy bài viết!');
     }
@@ -88,7 +94,20 @@ export class ArticleService {
     }
   }
 
-  // async create(thumbnail_image: Express.Multer.File) {
-  //   return await compressAndSaveImage(thumbnail_image);
-  // }
+  async deleteSoft(id: string): Promise<{ deleteCount: number }> {
+    const entity = await this.articleModel
+      .findById(id)
+      .where({ is_deleted: { $ne: true } })
+      .lean()
+      .exec();
+    if (!entity) {
+      throw new NotFoundException('Đối tượng không tồn tại!!');
+    }
+    await this.articleModel
+      .findByIdAndUpdate(id, { is_deleted: true }, { new: true })
+      .exec();
+    return {
+      deleteCount: 1,
+    };
+  }
 }

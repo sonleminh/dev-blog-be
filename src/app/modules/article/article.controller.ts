@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -18,6 +21,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AuthUser } from 'src/app/decorators/auth.decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Types } from 'mongoose';
+import { ObjectIdParamDto } from 'src/app/dtos/object-id.dto';
 
 @Controller('article')
 export class ArticleController {
@@ -68,9 +72,12 @@ export class ArticleController {
     );
   }
 
-  // @Post('/upload')
-  // @UseInterceptors(FileInterceptor('file'))
-  // async uploadFile(@UploadedFile() file: Express.Multer.File) {
-  //   return await this.articleService.create(file);
-  // }
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  @HttpCode(HttpStatus.CREATED)
+  async softDelete(
+    @Param() { id }: ObjectIdParamDto,
+  ): Promise<{ deleteCount: number }> {
+    return await this.articleService.deleteSoft(id);
+  }
 }
