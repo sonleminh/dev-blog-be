@@ -1,14 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform } from 'class-transformer';
-import { HydratedDocument, Types } from 'mongoose';
-import { CommonEntity } from 'src/app/entities/common.entity';
+import { Types } from 'mongoose';
 import { User } from '../../user/user.entity';
-import { Category } from '../../category/entities/category.entity';
+// import { Category } from '../../category/entities/category.entity';
 
-export type ArticleDocument = HydratedDocument<Article>;
 
 @Schema({ collection: 'articles', timestamps: true })
-export class Article {
+export class ArticleEntity {
   @Transform(({ value }) => value.toString(), { toPlainOnly: true })
   _id: Types.ObjectId;
 
@@ -19,7 +17,7 @@ export class Article {
   title: string;
 
   @Prop({})
-  tag: string;
+  tags: string[];
 
   @Prop({ required: true })
   summary: string;
@@ -33,11 +31,11 @@ export class Article {
   @Prop({ unique: true })
   id_slug: string;
 
-  @Prop({ type: Types.ObjectId, ref: Category.name })
-  id_category: string;
+  // @Prop({ type: Types.ObjectId, ref: Category.name })
+  // id_category: string;
 
   @Prop({ default: false })
   is_deleted: boolean;
 }
 
-export const ArticleSchema = SchemaFactory.createForClass(Article);
+export const ArticleSchema = SchemaFactory.createForClass(ArticleEntity);

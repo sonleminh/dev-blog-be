@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 import { Types } from 'mongoose';
 import { User } from '../../user/user.entity';
 import { Prop } from '@nestjs/mongoose';
@@ -10,9 +10,9 @@ export class CreateArticleDto {
   title: string;
 
   @IsOptional()
-  @IsString()
+  @IsArray()
   @Length(0, 30, { message: 'Vui lòng nhập từ 0-30 ký tự!' })
-  tag: string;
+  tag: string[];
 
   @IsNotEmpty({ message: 'Nội dung này không được để trống!' })
   @IsString()
@@ -24,9 +24,9 @@ export class CreateArticleDto {
   @Length(1, 10000, { message: 'Độ dài đoạn tóm tắt từ 1-10000 ký tự!' })
   content: string;
 
-  @IsString()
-  @Length(0)
-  id_category: string;
+  // @IsString()
+  // @Length(0)
+  // id_category: string;
 
   @IsOptional()
   thumbnail_image?: string | null;
@@ -41,7 +41,7 @@ export class UpdateArticleDto {
   @IsOptional()
   @IsString()
   @Length(0, 30, { message: 'Vui lòng nhập từ 0-30 ký tự!' })
-  tag: string;
+  tag: string[];
 
   @IsOptional()
   @IsString()
@@ -53,8 +53,8 @@ export class UpdateArticleDto {
   @Length(1, 10000, { message: 'Độ dài đoạn tóm tắt từ 1-10000 ký tự!' })
   content: string;
 
-  @IsOptional()
-  @IsString()
-  @Length(0)
-  id_category: string;
+  // @IsOptional()
+  // @IsString()
+  // @Length(0)
+  // id_category: string;
 }

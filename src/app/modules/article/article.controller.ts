@@ -8,29 +8,27 @@ import {
   Param,
   Patch,
   Post,
-  Request,
+  Query,
   UploadedFile,
-  UploadedFiles,
   UseGuards,
-  UseInterceptors,
+  UseInterceptors
 } from '@nestjs/common';
-import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
-import { RequestExpress } from 'src/app/interfaces/exception-response.interface';
-import { ArticleService } from './article.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { AuthUser } from 'src/app/decorators/auth.decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Types } from 'mongoose';
+import { AuthUser } from 'src/app/decorators/auth.decorators';
 import { ObjectIdParamDto } from 'src/app/dtos/object-id.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { ArticleService } from './article.service';
+import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 
 @Controller('article')
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
-  async getArticleList() {
-    return this.articleService.getArticleList();
+  async getArticleList(@Query() queryParam) {
+    return this.articleService.findAll(queryParam);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -65,7 +63,7 @@ export class ArticleController {
     @Body() updateArticleDTO: UpdateArticleDto,
     @UploadedFile() thumbnail_image: Express.Multer.File,
   ) {
-    return await this.articleService.updateArticle(
+    return await this.articleService.update(
       id,
       updateArticleDTO,
       thumbnail_image,

@@ -4,27 +4,35 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Article, ArticleDocument } from './entities/article.entity';
+import { ArticleEntity } from './entities/article.entity';
 import { Model, Types } from 'mongoose';
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
-import { FirebaseRepository } from '../firebase/firebase.repository';
 import { FirebaseService } from '../firebase/firebase.service';
+import { paginateCalculator } from 'src/app/utils/page-helpers';
 
 @Injectable()
 export class ArticleService {
   constructor(
-    @InjectModel(Article.name) private articleModel: Model<ArticleDocument>,
+    @InjectModel(ArticleEntity.name) private articleModel: Model<ArticleEntity>,
     private readonly firebaseService: FirebaseService,
   ) {}
 
-  async getArticleList() {
+  async findAll({ page, limit }) {
     try {
       const key = { is_deleted: { $ne: true } };
+
+      const { resPerPage, passedPage } = paginateCalculator(page, limit);
+
       const filterObject = { ...key };
 
       const [res, total] = await Promise.all([
-        this.articleModel.find(filterObject).lean().exec(),
-        this.articleModel.countDocuments(filterObject)
+        this.articleModel
+          .find(filterObject)
+          .limit(resPerPage)
+          .skip(passedPage)
+          .lean()
+          .exec(),
+        this.articleModel.countDocuments(filterObject),
       ]);
       return { articleList: res, total };
     } catch (error) {
@@ -59,39 +67,37 @@ export class ArticleService {
     }
   }
 
-  async updateArticle(
+  async update(
     id: Types.ObjectId,
     body: UpdateArticleDto,
     thumbnail_image: Express.Multer.File,
   ) {
-    try {
-      // return await this.articleModel
-      //   .findByIdAndUpdate(id, updateArticleDTO, { new: true })
-      //   .exec();
-      const entity = await this.articleModel.findById(id).lean();
+    const entity = await this.articleModel
+      .findById(id)
+      .where({ is_deleted: { $ne: true } })
+      .lean();
 
-      if (!entity) {
-        throw new NotFoundException('Đối tượng không tồn tại!!');
-      }
-
-      let newData: Article = { ...entity, ...body };
-
-      if (thumbnail_image) {
-        const imageUrl = await this.firebaseService.uploadFile(thumbnail_image);
-        newData = {
-          ...newData,
-          thumbnail_image: imageUrl,
-        };
-      }
-
-      return await this.articleModel
-        .findByIdAndUpdate(id, newData, {
-          new: true,
-        })
-        .exec();
-    } catch (error) {
-      throw new BadRequestException(error);
+    if (!entity) {
+      throw new NotFoundException('Đối tượng không tồn tại!!');
     }
+
+    let newData: ArticleEntity = { ...entity, ...body };
+
+    if (thumbnail_image) {
+      const [imageUrl] = await Promise.all([
+        this.firebaseService.uploadFile(thumbnail_image),
+        this.firebaseService.deleteFile(entity.thumbnail_image),
+      ]);
+      newData = {
+        ...newData,
+        thumbnail_image: imageUrl,
+      };
+    }
+    return await this.articleModel
+      .findByIdAndUpdate(id, newData, {
+        new: true,
+      })
+      .exec();
   }
 
   async deleteSoft(id: string): Promise<{ deleteCount: number }> {

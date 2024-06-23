@@ -64,4 +64,22 @@ export class FirebaseService {
       stream.end(file.buffer);
     });
   }
+
+  async deleteFile(filePath: string) {
+    const match = filePath.match(/(?:storage\.googleapis\.com\/.+\/)(.+)/);
+    if (!match || match.length < 2) {
+      throw new Error(`Invalid file path: ${filePath}`);
+    }
+    const relativePath = decodeURIComponent(match[1]);
+    try {
+      const storage = this.getStorageInstance();
+      const bucket = storage.bucket();
+
+      const result = await bucket.file(relativePath).delete();
+      return result;
+    } catch (error) {
+      console.log('error:', error);
+      throw new Error(`Failed to delete file ${filePath}`);
+    }
+  }
 }

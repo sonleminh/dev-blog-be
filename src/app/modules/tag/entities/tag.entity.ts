@@ -1,0 +1,19 @@
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Transform } from 'class-transformer';
+// import { HydratedDocument } from 'mongoose';
+
+// export type TagDocument = HydratedDocument<Tag>;
+
+@Schema({ collection: 'tags', timestamps: true })
+export class TagEntity {
+  @Transform(({ value }) => value.toString(), { toPlainOnly: true })
+  _id: string;
+
+  @Prop({ require: true, unique: true, type: String })
+  value: string;
+
+  @Prop({ require: true, unique: true, type: String })
+  label: string;
+}
+
+export const TagSchema = SchemaFactory.createForClass(TagEntity);
