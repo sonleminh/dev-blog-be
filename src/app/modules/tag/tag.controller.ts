@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -18,25 +19,31 @@ import { Types } from 'mongoose';
 import { ObjectIdParamDto } from 'src/app/dtos/object-id.dto';
 
 @Controller('tag')
+@UseGuards(JwtAuthGuard)
 export class TagController {
   constructor(private tagService: TagService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
-  async getArticleList() {
+  async getTagList() {
     return this.tagService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('/')
   async createTag(@Body() createTagDTO: CreateTagDto) {
-    return await this.tagService.createTag(createTagDTO);
+    return await this.tagService.create(createTagDTO);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  // @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.CREATED)
   async update(@Param() { id }: { id: string }, @Body() body: UpdateTagDto) {
     return await this.tagService.update(id, body);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.CREATED)
+  async remove(
+    @Param() { id }: ObjectIdParamDto,
+  ): Promise<{ deletedCount: number }> {
+    return await this.tagService.remove(id);
   }
 }

@@ -22,7 +22,8 @@ export class TagService {
     }
   }
 
-  async createTag(createTagDTO: CreateTagDto) {
+  async create(createTagDTO: CreateTagDto) {
+    console.log(createTagDTO)
     try {
       const payload = createTagDTO;
       return await this.tagModel.create(payload);
@@ -43,5 +44,18 @@ export class TagService {
     return await this.tagModel
       .findByIdAndUpdate(id, { ...entity, ...body }, { new: true })
       .exec();
+  }
+
+  async remove(id: string): Promise<{ deletedCount: number }> {
+    const entity = await this.tagModel.findById(id).lean();
+    if (!entity) {
+      throw new NotFoundException('Đối tượng không tồn tại!!');
+    }
+
+    const result = await this.tagModel.deleteOne({ _id: id }).exec();
+
+    return {
+      deletedCount: result.deletedCount,
+    };
   }
 }
