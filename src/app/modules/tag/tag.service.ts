@@ -16,7 +16,11 @@ export class TagService {
 
   async findAll() {
     try {
-      return await this.tagModel.find().lean().exec();
+      const [res, total] = await Promise.all([
+        this.tagModel.find().lean().exec(),
+        this.tagModel.countDocuments(),
+      ])
+      return { tags: res, total };
     } catch (error) {
       throw new BadRequestException(error);
     }
