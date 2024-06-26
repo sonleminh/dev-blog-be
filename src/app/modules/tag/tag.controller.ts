@@ -28,6 +28,12 @@ export class TagController {
     return this.tagService.findAll();
   }
 
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  async findById(@Param() { id }: ObjectIdParamDto) {
+    return await this.tagService.findById(id);
+  }
+
   @Post('/')
   async createTag(@Body() createTagDTO: CreateTagDto) {
     return await this.tagService.create(createTagDTO);

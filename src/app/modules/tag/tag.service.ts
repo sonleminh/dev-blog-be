@@ -26,6 +26,10 @@ export class TagService {
     }
   }
 
+  async findById(id: string) {
+    return await this.tagModel.findById(id);
+  }
+
   async create(createTagDTO: CreateTagDto) {
     console.log(createTagDTO)
     try {
@@ -37,8 +41,9 @@ export class TagService {
   }
 
   async update(id: string, body: UpdateTagDto): Promise<TagEntity> {
+    // console.log('body:',body)
     const entity = await this.tagModel
-      .findOne({ _id: id })
+      .findById({ _id: id })
       .where({ is_deleted: { $ne: true } })
       .lean();
     if (!entity) {

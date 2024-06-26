@@ -14,6 +14,9 @@ export class TagEntity {
 
   @Prop({ require: true, unique: true, type: String })
   label: string;
+
+  @Prop({ default: false })
+  is_deleted: boolean;
 }
 
 export const TagSchema = SchemaFactory.createForClass(TagEntity);
