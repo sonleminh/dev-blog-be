@@ -5,9 +5,11 @@ import { AuthModule } from '../auth/auth.module';
 import { ArticleService } from './article.service';
 import { ArticleController } from './article.controller';
 import { FirebaseModule } from '../firebase/firebase.module';
+import { TagModule } from '../tag/tag.module';
 
 @Module({
   imports: [
+    TagModule,
     MongooseModule.forFeature([
       { name: ArticleEntity.name, schema: ArticleSchema },
     ]),

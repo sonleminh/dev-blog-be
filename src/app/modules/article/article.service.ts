@@ -9,12 +9,14 @@ import { Model, Types } from 'mongoose';
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 import { FirebaseService } from '../firebase/firebase.service';
 import { paginateCalculator } from 'src/app/utils/page-helpers';
+import { TagService } from '../tag/tag.service';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectModel(ArticleEntity.name) private articleModel: Model<ArticleEntity>,
     private readonly firebaseService: FirebaseService,
+    private readonly tagService: TagService,
   ) {}
 
   async findAll({ page, limit }) {
@@ -38,6 +40,18 @@ export class ArticleService {
     } catch (error) {
       throw new BadRequestException(error);
     }
+  }
+
+  async getInitialArticleForCreate() {
+    const tags = (await this.tagService.getAllTag()).map(
+      ({ value, label }) => ({
+        value,
+        label,
+      }),
+    );
+    return {
+      tags,
+    };
   }
 
   async getArticleById(id: Types.ObjectId) {

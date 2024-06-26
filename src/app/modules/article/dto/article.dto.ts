@@ -2,6 +2,8 @@ import { IsArray, IsNotEmpty, IsOptional, IsString, Length } from 'class-validat
 import { Types } from 'mongoose';
 import { User } from '../../user/user.entity';
 import { Prop } from '@nestjs/mongoose';
+import { Transform } from 'class-transformer';
+import { changeStringToArray } from 'src/app/utils/transform';
 
 export class CreateArticleDto {
   @IsNotEmpty({ message: 'Nội dung này không được để trống!' })
@@ -9,10 +11,9 @@ export class CreateArticleDto {
   @Length(0, 490, { message: 'Độ dài tiêu đề từ 0-490 ký tự!' })
   title: string;
 
-  @IsOptional()
-  @IsArray()
-  @Length(0, 30, { message: 'Vui lòng nhập từ 0-30 ký tự!' })
-  tag: string[];
+  @IsNotEmpty()
+  @Transform(({ value }) => changeStringToArray(value))
+  tags: string[];
 
   @IsNotEmpty({ message: 'Nội dung này không được để trống!' })
   @IsString()
@@ -39,9 +40,8 @@ export class UpdateArticleDto {
   title: string;
 
   @IsOptional()
-  @IsString()
-  @Length(0, 30, { message: 'Vui lòng nhập từ 0-30 ký tự!' })
-  tag: string[];
+  @Transform(({ value }) => changeStringToArray(value))
+  tags: string[];
 
   @IsOptional()
   @IsString()

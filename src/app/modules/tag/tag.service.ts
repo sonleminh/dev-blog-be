@@ -26,6 +26,13 @@ export class TagService {
     }
   }
 
+  async getAllTag() {
+    return await this.tagModel
+      .find({ is_deleted: { $ne: true } })
+      .lean()
+      .exec();
+  }
+
   async findById(id: string) {
     return await this.tagModel.findById(id);
   }

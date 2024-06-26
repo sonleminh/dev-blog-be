@@ -11,7 +11,7 @@ import {
   Query,
   UploadedFile,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Types } from 'mongoose';
@@ -22,22 +22,25 @@ import { ArticleService } from './article.service';
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 
 @Controller('article')
+@UseGuards(JwtAuthGuard)
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   async getArticleList(@Query() queryParam) {
     return this.articleService.findAll(queryParam);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Get('get-article-initial')
+  async findInitial(): Promise<{ tags: object[] }> {
+    return await this.articleService.getInitialArticleForCreate();
+  }
+
   @Get(':id')
   async getArticleById(@Param('id') id: Types.ObjectId) {
     return this.articleService.getArticleById(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('thumbnail_image'))
   @Post('/')
   async createArticle(
@@ -55,7 +58,6 @@ export class ArticleController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('thumbnail_image'))
   @Patch(':id')
   async updateArticle(
@@ -70,7 +72,6 @@ export class ArticleController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.CREATED)
   async softDelete(
