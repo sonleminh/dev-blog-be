@@ -22,18 +22,21 @@ import { ArticleService } from './article.service';
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 
 @Controller('article')
-@UseGuards(JwtAuthGuard)
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
   @Get()
   async getArticleList(@Query() queryParam) {
+    console.log('cc')
     return this.articleService.findAll(queryParam);
   }
 
   @Get('get-article-initial')
-  async findInitial(): Promise<{ tags: object[] }> {
-    return await this.articleService.getInitialArticleForCreate();
+  // async findInitial(): Promise<{ tags: object[] }> {
+  //   return await this.articleService.getInitialArticleForCreate();
+  // }
+  async findInitial() {
+      return await this.articleService.getInitialArticleForCreate();
   }
 
   @Get(':id')
@@ -41,7 +44,8 @@ export class ArticleController {
     return this.articleService.getArticleById(id);
   }
 
-  @UseInterceptors(FileInterceptor('thumbnail_image'))
+@UseGuards(JwtAuthGuard)
+@UseInterceptors(FileInterceptor('thumbnail_image'))
   @Post('/')
   async createArticle(
     @AuthUser() { id_user },
@@ -58,7 +62,8 @@ export class ArticleController {
     );
   }
 
-  @UseInterceptors(FileInterceptor('thumbnail_image'))
+@UseGuards(JwtAuthGuard)
+@UseInterceptors(FileInterceptor('thumbnail_image'))
   @Patch(':id')
   async updateArticle(
     @Param() { id }: { id: Types.ObjectId },
@@ -72,7 +77,8 @@ export class ArticleController {
     );
   }
 
-  @Delete(':id')
+@UseGuards(JwtAuthGuard)
+@Delete(':id')
   @HttpCode(HttpStatus.CREATED)
   async softDelete(
     @Param() { id }: ObjectIdParamDto,

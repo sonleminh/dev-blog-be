@@ -1,12 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-
-export type CategoryDocument = HydratedDocument<Category>;
+import { Transform } from 'class-transformer';
 
 @Schema({ collection: 'categories', timestamps: true })
-export class Category {
+export class CategoryEntity {
+  @Transform(({ value }) => value.toString(), { toPlainOnly: true })
+  _id: string;
+
   @Prop({ require: true, unique: true, type: String })
-  name: string;
+  value: string;
+
+  @Prop({ require: true, unique: true, type: String })
+  label: string;
 }
 
-export const CategorySchema = SchemaFactory.createForClass(Category);
+export const CategorySchema = SchemaFactory.createForClass(CategoryEntity);
