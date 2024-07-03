@@ -19,7 +19,7 @@ import { AuthUser } from 'src/app/decorators/auth.decorators';
 import { ObjectIdParamDto } from 'src/app/dtos/object-id.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ArticleService } from './article.service';
-import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
+import { CreateArticleDto, UpdateArticleDto, UpdateArticleViewsDto } from './dto/article.dto';
 
 @Controller('article')
 export class ArticleController {
@@ -84,5 +84,10 @@ export class ArticleController {
     @Param() { id }: ObjectIdParamDto,
   ): Promise<{ deleteCount: number }> {
     return await this.articleService.deleteSoft(id);
+  }
+
+  @Post('/views')
+  async updateViews(@Body() { article_id }: UpdateArticleViewsDto) {
+    return await this.articleService.updateViews(article_id)
   }
 }

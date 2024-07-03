@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
+import { IsArray, IsMongoId, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 import { Types } from 'mongoose';
 import { User } from '../../user/user.entity';
 import { Prop } from '@nestjs/mongoose';
@@ -57,4 +57,9 @@ export class UpdateArticleDto {
   // @IsString()
   // @Length(0)
   // id_category: string;
+}
+
+export class UpdateArticleViewsDto {
+  @IsMongoId()
+  article_id: string;
 }

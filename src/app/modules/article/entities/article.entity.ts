@@ -28,6 +28,9 @@ export class ArticleEntity {
   @Prop({})
   thumbnail_image: string;
 
+  @Prop({ default: 0 })
+  views: number;
+
   @Prop({ unique: true })
   id_slug: string;
 

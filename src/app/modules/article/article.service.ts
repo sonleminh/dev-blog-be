@@ -42,6 +42,10 @@ export class ArticleService {
     }
   }
 
+  async getTrending() {
+    
+  }
+
   async getInitialArticleForCreate() {
     const tags = (await this.tagService.getAllTag()).map(
       ({ value, label }) => ({
@@ -129,5 +133,20 @@ export class ArticleService {
     return {
       deleteCount: 1,
     };
+  }
+
+  async updateViews(article_id: string) {
+    const article_entity = await this.articleModel
+      .findById(article_id)
+      .lean()
+      .exec();
+
+    const newData = { ...article_entity, views: ++article_entity.views };
+    console.log(newData);
+    return await this.articleModel
+      .findByIdAndUpdate(article_id, newData, {
+        new: true,
+      })
+      .exec();
   }
 }
