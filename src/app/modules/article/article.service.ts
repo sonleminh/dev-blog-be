@@ -20,13 +20,12 @@ export class ArticleService {
     private readonly tagService: TagService,
   ) {}
 
-  async findAll({ page, limit }) {
+  async findAll({ page, limit, tag }) {
     try {
       const key = { is_deleted: { $ne: true } };
-
       const { resPerPage, passedPage } = paginateCalculator(page, limit);
 
-      const filterObject = { ...key };
+      const filterObject = tag ? { ...key, tags: tag } : { ...key };
 
       const [res, total] = await Promise.all([
         this.articleModel
@@ -37,6 +36,7 @@ export class ArticleService {
           .exec(),
         this.articleModel.countDocuments(filterObject),
       ]);
+      console.log(2222)
       return { articleList: res, total };
     } catch (error) {
       throw new BadRequestException(error);
