@@ -10,6 +10,7 @@ import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 import { FirebaseService } from '../firebase/firebase.service';
 import { paginateCalculator } from 'src/app/utils/page-helpers';
 import { TagService } from '../tag/tag.service';
+import getLast30DaysRange from 'src/app/utils/getCurrentMonthRange';
 
 @Injectable()
 export class ArticleService {
@@ -43,7 +44,21 @@ export class ArticleService {
   }
 
   async getTrending() {
-    
+    try {
+      const { start, end } = getLast30DaysRange();
+      const key = {
+        is_deleted: { $ne: true },
+        createdAt: { $gte: start, $lte: end },
+      };
+
+      const [res, total] = await Promise.all([
+        this.articleModel.find(key).sort({ views: -1 }).lean().exec(),
+        this.articleModel.countDocuments(key),
+      ]);
+      return { articleList: res, total };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
   async getInitialArticleForCreate() {

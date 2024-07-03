@@ -19,7 +19,11 @@ import { AuthUser } from 'src/app/decorators/auth.decorators';
 import { ObjectIdParamDto } from 'src/app/dtos/object-id.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ArticleService } from './article.service';
-import { CreateArticleDto, UpdateArticleDto, UpdateArticleViewsDto } from './dto/article.dto';
+import {
+  CreateArticleDto,
+  UpdateArticleDto,
+  UpdateArticleViewsDto,
+} from './dto/article.dto';
 
 @Controller('article')
 export class ArticleController {
@@ -27,8 +31,12 @@ export class ArticleController {
 
   @Get()
   async getArticleList(@Query() queryParam) {
-    console.log('cc')
     return this.articleService.findAll(queryParam);
+  }
+
+  @Get('/trending')
+  async getTredingArticleList() {
+    return this.articleService.getTrending();
   }
 
   @Get('get-article-initial')
@@ -36,7 +44,7 @@ export class ArticleController {
   //   return await this.articleService.getInitialArticleForCreate();
   // }
   async findInitial() {
-      return await this.articleService.getInitialArticleForCreate();
+    return await this.articleService.getInitialArticleForCreate();
   }
 
   @Get(':id')
@@ -44,8 +52,8 @@ export class ArticleController {
     return this.articleService.getArticleById(id);
   }
 
-@UseGuards(JwtAuthGuard)
-@UseInterceptors(FileInterceptor('thumbnail_image'))
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('thumbnail_image'))
   @Post('/')
   async createArticle(
     @AuthUser() { id_user },
@@ -62,8 +70,8 @@ export class ArticleController {
     );
   }
 
-@UseGuards(JwtAuthGuard)
-@UseInterceptors(FileInterceptor('thumbnail_image'))
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('thumbnail_image'))
   @Patch(':id')
   async updateArticle(
     @Param() { id }: { id: Types.ObjectId },
@@ -77,8 +85,8 @@ export class ArticleController {
     );
   }
 
-@UseGuards(JwtAuthGuard)
-@Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
   @HttpCode(HttpStatus.CREATED)
   async softDelete(
     @Param() { id }: ObjectIdParamDto,
@@ -88,6 +96,6 @@ export class ArticleController {
 
   @Post('/views')
   async updateViews(@Body() { article_id }: UpdateArticleViewsDto) {
-    return await this.articleService.updateViews(article_id)
+    return await this.articleService.updateViews(article_id);
   }
 }
