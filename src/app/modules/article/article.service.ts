@@ -36,7 +36,6 @@ export class ArticleService {
           .exec(),
         this.articleModel.countDocuments(filterObject),
       ]);
-      console.log(2222)
       return { articleList: res, total };
     } catch (error) {
       throw new BadRequestException(error);
