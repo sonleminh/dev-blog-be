@@ -38,7 +38,6 @@ export class TagService {
   }
 
   async create(createTagDTO: CreateTagDto) {
-    console.log(createTagDTO)
     try {
       const payload = createTagDTO;
       return await this.tagModel.create(payload);

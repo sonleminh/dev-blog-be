@@ -157,7 +157,6 @@ export class ArticleService {
       .exec();
 
     const newData = { ...article_entity, views: ++article_entity.views };
-    console.log(newData);
     return await this.articleModel
       .findByIdAndUpdate(article_id, newData, {
         new: true,

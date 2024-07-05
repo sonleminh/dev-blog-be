@@ -22,7 +22,6 @@ export class FirebaseService {
       client_x509_cert_url: this.configService.get('CLIENT_CERT_URL'),
       universe_domain: this.configService.get('UNIVERSAL_DOMAIN'),
     } as admin.ServiceAccount;
-    // const serviceAccount = require('../../../../dev-blog-7a694-firebase-adminsdk-4jhng-d70559a8b6.json');
     admin.initializeApp({
       credential: admin.credential.cert(firebaseConfig),
       storageBucket: `${this.configService.get('PROJECT_ID')}.appspot.com`,

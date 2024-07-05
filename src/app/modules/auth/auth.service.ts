@@ -87,7 +87,6 @@ export class AuthService {
   extractRefreshToken(req: Request) {
     try {
       const { rt } = req.signedCookies;
-      console.log('rt:', req);
       if (!rt) {
         throw new ForbiddenException();
       }
