@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform } from 'class-transformer';
 import { Types } from 'mongoose';
 import { User } from '../../user/user.entity';
+import { TagsDto } from '../dto/tag.dto';
 // import { Category } from '../../category/entities/category.entity';
 
 
@@ -17,7 +18,7 @@ export class ArticleEntity {
   title: string;
 
   @Prop({})
-  tags: string[];
+  tags: TagsDto[];
 
   @Prop({ required: true })
   summary: string;

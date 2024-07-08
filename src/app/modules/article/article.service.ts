@@ -49,6 +49,8 @@ export class ArticleService {
         ];
       }
 
+      console.log('tag:', tag)
+
       const [res, tags, total] = await Promise.all([
         pipeline.length
           ? this.articleModel.aggregate(pipeline).exec()
@@ -65,22 +67,22 @@ export class ArticleService {
         this.articleModel.countDocuments(filterObject),
       ]);
 
-      const {
-        FE_articles,
-        BE_articles,
-        recent_articles,
-        trending_articles,
-        // all_tags,
-      } = res[0];
+      if (pipeline.length) {
+        const { FE_articles, BE_articles, recent_articles, trending_articles } =
+          res[0];
 
-      // const tags = all_tags.length > 0 ? all_tags[0].tags : [];
+        return {
+          recent_articles,
+          FE_articles,
+          BE_articles,
+          trending_articles,
+          tags,
+          total,
+        };
+      }
 
       return {
-        recent_articles,
-        FE_articles,
-        BE_articles,
-        trending_articles,
-        tags,
+        articleList: res,
         total,
       };
     } catch (error) {
@@ -133,6 +135,7 @@ export class ArticleService {
     id_user: string,
   ) {
     try {
+      console.log(createArticleDTO)
       const imageUrl = await this.firebaseService.uploadFile(thumbnail_image);
       const payload = {
         ...createArticleDTO,

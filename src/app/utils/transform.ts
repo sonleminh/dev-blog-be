@@ -11,3 +11,15 @@ export function changeStringToArray(arrStr: string) {
     `Mỗi phần tử phải đúng định dạng string!`,
   );
 }
+
+export function changeObjStringToArray(arrStr) {
+  const array = [...new Set(arrStr.split('},'))] as object[];
+
+  if (array?.length && array.every((item) => typeof item === 'string')) {
+    return array;
+  }
+
+  throw new UnprocessableEntityException(
+    `Mỗi phần tử phải đúng định dạng string!`,
+  );
+}

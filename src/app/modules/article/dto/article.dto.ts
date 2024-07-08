@@ -1,9 +1,10 @@
-import { IsArray, IsMongoId, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
+import { IsArray, IsMongoId, IsNotEmpty, IsObject, IsOptional, IsString, Length, ValidateNested } from 'class-validator';
 import { Types } from 'mongoose';
 import { User } from '../../user/user.entity';
 import { Prop } from '@nestjs/mongoose';
-import { Transform } from 'class-transformer';
-import { changeStringToArray } from 'src/app/utils/transform';
+import { Transform, Type } from 'class-transformer';
+import { changeObjStringToArray, changeStringToArray } from 'src/app/utils/transform';
+import { TagsDto } from './tag.dto';
 
 export class CreateArticleDto {
   @IsNotEmpty({ message: 'Nội dung này không được để trống!' })
@@ -12,7 +13,10 @@ export class CreateArticleDto {
   title: string;
 
   @IsNotEmpty()
-  @Transform(({ value }) => changeStringToArray(value))
+  // @ValidateNested()
+  // @Type(() => TagsDto)
+  // @Transform(({ value }) => changeObjStringToArray(val ue))
+  @Transform(({ value }) => changeObjStringToArray(value))
   tags: string[];
 
   @IsNotEmpty({ message: 'Nội dung này không được để trống!' })
@@ -40,8 +44,10 @@ export class UpdateArticleDto {
   title: string;
 
   @IsOptional()
-  @Transform(({ value }) => changeStringToArray(value))
-  tags: string[];
+  @IsObject()
+  @ValidateNested()
+  @Type(() => TagsDto)
+  tags: TagsDto[];
 
   @IsOptional()
   @IsString()
