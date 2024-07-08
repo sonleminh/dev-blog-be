@@ -20,24 +20,69 @@ export class ArticleService {
     private readonly tagService: TagService,
   ) {}
 
-  async findAll({ page, limit, tag }) {
+  async findAll({ page, limit, tag, find_option }) {
     try {
       const key = { is_deleted: { $ne: true } };
+      const { start } = getLast30DaysRange();
+
       const { resPerPage, passedPage } = paginateCalculator(page, limit);
 
       const filterObject = tag ? { ...key, tags: tag } : { ...key };
 
-      const [res, total] = await Promise.all([
-        this.articleModel
-          .find(filterObject)
-          .limit(resPerPage)
-          .skip(passedPage)
-          .lean()
-          .exec(),
+      let pipeline = [];
+
+      if (find_option === 'HOME') {
+        pipeline = [
+          { $match: key },
+          {
+            $facet: {
+              recent_articles: [{ $sort: { date: -1 } }, { $limit: 10 }],
+              FE_articles: [{ $match: { tags: 'front-end' } }, { $limit: 6 }],
+              BE_articles: [{ $match: { tags: 'back-end' } }, { $limit: 6 }],
+              trending_articles: [
+                { $match: { createdAt: { $gte: start } } },
+                { $sort: { views: -1 } },
+                { $limit: 4 },
+              ],
+            },
+          },
+        ];
+      }
+
+      const [res, tags, total] = await Promise.all([
+        pipeline.length
+          ? this.articleModel.aggregate(pipeline).exec()
+          : this.articleModel
+              .find(filterObject)
+              .limit(resPerPage)
+              .skip(passedPage)
+              .lean()
+              .exec(),
+        (await this.tagService.getAllTag()).map(({ value, label }) => ({
+          value,
+          label,
+        })),
         this.articleModel.countDocuments(filterObject),
       ]);
-      // cc
-      return { articleList: res, total };
+
+      const {
+        FE_articles,
+        BE_articles,
+        recent_articles,
+        trending_articles,
+        // all_tags,
+      } = res[0];
+
+      // const tags = all_tags.length > 0 ? all_tags[0].tags : [];
+
+      return {
+        recent_articles,
+        FE_articles,
+        BE_articles,
+        trending_articles,
+        tags,
+        total,
+      };
     } catch (error) {
       throw new BadRequestException(error);
     }

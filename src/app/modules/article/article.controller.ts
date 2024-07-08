@@ -49,7 +49,6 @@ export class ArticleController {
 
   @Get(':id')
   async getArticleById(@Param('id') id: Types.ObjectId) {
-    console.log('id:', id)
     return this.articleService.getArticleById(id);
   }
 
