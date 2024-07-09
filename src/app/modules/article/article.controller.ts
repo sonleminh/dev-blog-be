@@ -34,6 +34,12 @@ export class ArticleController {
     return this.articleService.findAll(queryParam);
   }
 
+  @Get('/tag/:id')
+  async getArticleListByTag(@Param('id') id: string, @Query() queryParam) {
+    console.log(id)
+    return this.articleService.findByTag(id, queryParam);
+  }
+
   @Get('/trending')
   async getTredingArticleList() {
     return this.articleService.getTrending();

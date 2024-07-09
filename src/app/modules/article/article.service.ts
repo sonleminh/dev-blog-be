@@ -11,6 +11,7 @@ import { FirebaseService } from '../firebase/firebase.service';
 import { paginateCalculator } from 'src/app/utils/page-helpers';
 import { TagService } from '../tag/tag.service';
 import getLast30DaysRange from 'src/app/utils/getCurrentMonthRange';
+import { ObjectIdParamDto } from 'src/app/dtos/object-id.dto';
 
 @Injectable()
 export class ArticleService {
@@ -20,20 +21,18 @@ export class ArticleService {
     private readonly tagService: TagService,
   ) {}
 
-  async findAll({ page, limit, tag, find_option }) {
+  async findAll({ page, limit, find_option }) {
     try {
-      const key = { is_deleted: { $ne: true } };
+      const filterObject = { is_deleted: { $ne: true } };
       const { start } = getLast30DaysRange();
 
       const { resPerPage, passedPage } = paginateCalculator(page, limit);
-
-      const filterObject = tag ? { ...key, tags: tag } : { ...key };
 
       let pipeline = [];
 
       if (find_option === 'HOME') {
         pipeline = [
-          { $match: key },
+          { $match: filterObject },
           {
             $facet: {
               recent_articles: [{ $sort: { date: -1 } }, { $limit: 10 }],
@@ -83,19 +82,40 @@ export class ArticleService {
         };
       }
 
-      const tagDetail = tags.find((item) => item.value === tag);
-      console.log(tagDetail)
-
-      if (tagDetail) {
-        return {
-          articleList: res,
-          tag: tagDetail,
-          total,
-        };
-      }
       return {
         articleList: res,
         tags,
+        total,
+      };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  async findByTag(id: string, { page, limit }) {
+    try {
+      const filterObject = { is_deleted: { $ne: true }, 'tags.value': id };
+      const { resPerPage, passedPage } = paginateCalculator(page, limit);
+
+      const [res, tags, total] = await Promise.all([
+        this.articleModel
+          .find(filterObject)
+          .limit(resPerPage)
+          .skip(passedPage)
+          .lean()
+          .exec(),
+        (await this.tagService.getAllTag()).map(({ value, label }) => ({
+          value,
+          label,
+        })),
+        this.articleModel.countDocuments(filterObject),
+      ]);
+
+      const tagDetail = tags.find((item) => item.value === id);
+
+      return {
+        articleList: res,
+        tag: tagDetail,
         total,
       };
     } catch (error) {
