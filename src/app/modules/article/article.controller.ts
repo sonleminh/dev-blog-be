@@ -40,9 +40,6 @@ export class ArticleController {
   }
 
   @Get('get-article-initial')
-  // async findInitial(): Promise<{ tags: object[] }> {
-  //   return await this.articleService.getInitialArticleForCreate();
-  // }
   async findInitial() {
     return await this.articleService.getInitialArticleForCreate();
   }
@@ -59,10 +56,7 @@ export class ArticleController {
     @AuthUser() { id_user },
     @Body() createArticleDTO: CreateArticleDto,
     @UploadedFile() thumbnail_image: Express.Multer.File,
-    // @Request() req: RequestExpress,
   ) {
-    // const user = req.user;
-    // if (!user) throw new Error('User not found');
     return await this.articleService.createArticle(
       createArticleDTO,
       thumbnail_image,

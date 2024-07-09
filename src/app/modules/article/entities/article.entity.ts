@@ -3,7 +3,6 @@ import { Transform } from 'class-transformer';
 import { Types } from 'mongoose';
 import { User } from '../../user/user.entity';
 import { TagsDto } from '../dto/tag.dto';
-// import { Category } from '../../category/entities/category.entity';
 
 
 @Schema({ collection: 'articles', timestamps: true })

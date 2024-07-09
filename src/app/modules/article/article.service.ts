@@ -49,9 +49,14 @@ export class ArticleService {
         ];
       }
 
-      console.log('tag:', tag)
+      const tags = (await this.tagService.getAllTag()).map(
+        ({ value, label }) => ({
+          value,
+          label,
+        }),
+      );
 
-      const [res, tags, total] = await Promise.all([
+      const [res, total] = await Promise.all([
         pipeline.length
           ? this.articleModel.aggregate(pipeline).exec()
           : this.articleModel
@@ -60,10 +65,7 @@ export class ArticleService {
               .skip(passedPage)
               .lean()
               .exec(),
-        (await this.tagService.getAllTag()).map(({ value, label }) => ({
-          value,
-          label,
-        })),
+
         this.articleModel.countDocuments(filterObject),
       ]);
 
@@ -81,8 +83,19 @@ export class ArticleService {
         };
       }
 
+      const tagDetail = tags.find((item) => item.value === tag);
+      console.log(tagDetail)
+
+      if (tagDetail) {
+        return {
+          articleList: res,
+          tag: tagDetail,
+          total,
+        };
+      }
       return {
         articleList: res,
+        tags,
         total,
       };
     } catch (error) {
@@ -130,17 +143,18 @@ export class ArticleService {
   }
 
   async createArticle(
-    createArticleDTO: CreateArticleDto,
+    body: CreateArticleDto,
     thumbnail_image: Express.Multer.File,
     id_user: string,
   ) {
     try {
-      console.log(createArticleDTO)
       const imageUrl = await this.firebaseService.uploadFile(thumbnail_image);
+      const tags = JSON.parse(body.tags);
       const payload = {
-        ...createArticleDTO,
-        ...{ id_user: id_user, id_slug: `${createArticleDTO.title}-123` },
+        ...body,
+        ...{ id_user: id_user, id_slug: `${body.title}-123` },
         thumbnail_image: imageUrl,
+        tags: tags,
       };
       return await this.articleModel.create(payload);
     } catch (error) {
@@ -162,7 +176,11 @@ export class ArticleService {
       throw new NotFoundException('Đối tượng không tồn tại!!');
     }
 
-    let newData: ArticleEntity = { ...entity, ...body };
+    let newData: ArticleEntity = {
+      ...entity,
+      ...body,
+      tags: JSON.parse(body.tags),
+    };
 
     if (thumbnail_image) {
       const [imageUrl] = await Promise.all([
