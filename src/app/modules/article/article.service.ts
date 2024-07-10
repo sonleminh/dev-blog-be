@@ -11,7 +11,7 @@ import { FirebaseService } from '../firebase/firebase.service';
 import { paginateCalculator } from 'src/app/utils/page-helpers';
 import { TagService } from '../tag/tag.service';
 import getLast30DaysRange from 'src/app/utils/getCurrentMonthRange';
-import { ObjectIdParamDto } from 'src/app/dtos/object-id.dto';
+import { escapeRegExp } from 'src/app/utils/escapeRegExp';
 
 @Injectable()
 export class ArticleService {
@@ -21,9 +21,25 @@ export class ArticleService {
     private readonly tagService: TagService,
   ) {}
 
-  async findAll({ page, limit, find_option }) {
+  async findAll({ s, page, limit, find_option }) {
     try {
-      const filterObject = { is_deleted: { $ne: true } };
+      const filterObject = {
+        is_deleted: { $ne: true },
+        ...(s?.length && {
+          $or: [
+            {
+              title: {
+                $regex: new RegExp(escapeRegExp(s), 'i'),
+              },
+            },
+            {
+              content: {
+                $regex: new RegExp(escapeRegExp(s), 'i'),
+              },
+            },
+          ],
+        }),
+      };
       const { start } = getLast30DaysRange();
 
       const { resPerPage, passedPage } = paginateCalculator(page, limit);
@@ -99,7 +115,7 @@ export class ArticleService {
   }
 
   async findByTag(tag: string, { page, limit }) {
-    console.log({ page, limit })
+    console.log({ page, limit });
     try {
       const filterObject = { is_deleted: { $ne: true }, 'tags.value': tag };
       const { resPerPage, passedPage } = paginateCalculator(page, limit);
@@ -119,7 +135,7 @@ export class ArticleService {
       ]);
 
       const tagDetail = tags.find((item) => item.value === tag);
-      console.log('total:', total)
+      console.log('total:', total);
       return {
         articleList: res,
         tag: tagDetail,
@@ -243,17 +259,14 @@ export class ArticleService {
     };
   }
 
-  async updateViews(article_id: string) {
-    const article_entity = await this.articleModel
-      .findById(article_id)
-      .lean()
-      .exec();
+  async incrementView(id: Types.ObjectId) {
+    const article = await this.articleModel.findById(id).exec();
 
-    const newData = { ...article_entity, views: ++article_entity.views };
-    return await this.articleModel
-      .findByIdAndUpdate(article_id, newData, {
-        new: true,
-      })
-      .exec();
+    if (!article) {
+      throw new NotFoundException('Article not found');
+    }
+
+    article.views += 1;
+    return article.save();
   }
 }

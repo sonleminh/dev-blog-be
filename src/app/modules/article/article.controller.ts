@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   UploadedFile,
   UseGuards,
@@ -19,11 +20,7 @@ import { AuthUser } from 'src/app/decorators/auth.decorators';
 import { ObjectIdParamDto } from 'src/app/dtos/object-id.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ArticleService } from './article.service';
-import {
-  CreateArticleDto,
-  UpdateArticleDto,
-  UpdateArticleViewsDto,
-} from './dto/article.dto';
+import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 
 @Controller('article')
 export class ArticleController {
@@ -36,7 +33,6 @@ export class ArticleController {
 
   @Get('/tag/:id')
   async getArticleListByTag(@Param('id') tag: string, @Query() queryParam) {
-    console.log(tag)
     return this.articleService.findByTag(tag, queryParam);
   }
 
@@ -94,8 +90,8 @@ export class ArticleController {
     return await this.articleService.deleteSoft(id);
   }
 
-  @Post('/views')
-  async updateViews(@Body() { article_id }: UpdateArticleViewsDto) {
-    return await this.articleService.updateViews(article_id);
+  @Put(':id/view')
+  async increamentView(@Param('id') id: Types.ObjectId) {
+    return this.articleService.incrementView(id);
   }
 }
