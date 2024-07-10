@@ -36,8 +36,14 @@ export class ArticleService {
           {
             $facet: {
               recent_articles: [{ $sort: { date: -1 } }, { $limit: 10 }],
-              FE_articles: [{ $match: { tags: 'front-end' } }, { $limit: 6 }],
-              BE_articles: [{ $match: { tags: 'back-end' } }, { $limit: 6 }],
+              FE_articles: [
+                { $match: { 'tags.value': 'front-end' } },
+                { $limit: 6 },
+              ],
+              BE_articles: [
+                { $match: { 'tags.value': 'back-end' } },
+                { $limit: 6 },
+              ],
               trending_articles: [
                 { $match: { createdAt: { $gte: start } } },
                 { $sort: { views: -1 } },
@@ -92,9 +98,10 @@ export class ArticleService {
     }
   }
 
-  async findByTag(id: string, { page, limit }) {
+  async findByTag(tag: string, { page, limit }) {
+    console.log({ page, limit })
     try {
-      const filterObject = { is_deleted: { $ne: true }, 'tags.value': id };
+      const filterObject = { is_deleted: { $ne: true }, 'tags.value': tag };
       const { resPerPage, passedPage } = paginateCalculator(page, limit);
 
       const [res, tags, total] = await Promise.all([
@@ -111,8 +118,8 @@ export class ArticleService {
         this.articleModel.countDocuments(filterObject),
       ]);
 
-      const tagDetail = tags.find((item) => item.value === id);
-
+      const tagDetail = tags.find((item) => item.value === tag);
+      console.log('total:', total)
       return {
         articleList: res,
         tag: tagDetail,

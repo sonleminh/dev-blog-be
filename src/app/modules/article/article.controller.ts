@@ -35,9 +35,9 @@ export class ArticleController {
   }
 
   @Get('/tag/:id')
-  async getArticleListByTag(@Param('id') id: string, @Query() queryParam) {
-    console.log(id)
-    return this.articleService.findByTag(id, queryParam);
+  async getArticleListByTag(@Param('id') tag: string, @Query() queryParam) {
+    console.log(tag)
+    return this.articleService.findByTag(tag, queryParam);
   }
 
   @Get('/trending')
