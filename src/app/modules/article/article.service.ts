@@ -115,7 +115,6 @@ export class ArticleService {
   }
 
   async findByTag(tag: string, { page, limit }) {
-    console.log({ page, limit });
     try {
       const filterObject = { is_deleted: { $ne: true }, 'tags.value': tag };
       const { resPerPage, passedPage } = paginateCalculator(page, limit);
@@ -135,7 +134,6 @@ export class ArticleService {
       ]);
 
       const tagDetail = tags.find((item) => item.value === tag);
-      console.log('total:', total);
       return {
         articleList: res,
         tag: tagDetail,

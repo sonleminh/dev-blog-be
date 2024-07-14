@@ -77,6 +77,14 @@ export class FirebaseService {
       const result = await bucket.file(relativePath).delete();
       return result;
     } catch (error) {
+      if (error.code === 404) {
+        // File not found error code
+        console.log(`File ${relativePath} not found, skipping deletion.`);
+        return {
+          success: false,
+          message: `File ${relativePath} not found, skipping deletion.`,
+        };
+      }
       console.log('error:', error);
       throw new Error(`Failed to delete file ${filePath}`);
     }

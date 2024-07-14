@@ -174,24 +174,4 @@ export class AuthService {
       path: this.CKPath,
     });
   }
-
-  profile(req: Request) {
-    // console.log(req.cookies);
-    return 0;
-  }
-
-  // async signIn(res: Response) {
-  //   try {
-  //     const user = await this.userService.findAndVerify(authCredentialsDto);
-  //     const { accessToken, refreshToken } = await this.generateTokens({
-  //       _id: user._id,
-  //       username: user.username,
-  //     });
-  //     this.storeRefreshToken(res, refreshToken);
-  //     const { password, ...tempUser } = user['_doc'];
-  //     return { accessToken, user: tempUser };
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
 }

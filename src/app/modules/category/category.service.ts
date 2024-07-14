@@ -37,7 +37,6 @@ export class CategoryService {
   }
 
   async update(id: string, body: any): Promise<CategoryEntity> {
-    // console.log('body:',body)
     const entity = await this.categoryModel
       .findById({ _id: id })
       .where({ is_deleted: { $ne: true } })

@@ -40,11 +40,7 @@ export class AuthController {
       refreshToken: string;
     };
   }> {
-    // @Body() authCredentialsDto: AuthCredentialsDto,
-    // @Res({ passthrough: true }) res: Response,
-    // console.log('1:', req.user);
     return this.authService.generateJwtToken(req.user, res);
-    // return 'ccc';
   }
 
   @UseGuards(JwtAuthGuard)

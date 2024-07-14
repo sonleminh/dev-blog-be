@@ -47,7 +47,6 @@ export class TagService {
   }
 
   async update(id: string, body: UpdateTagDto): Promise<TagEntity> {
-    // console.log('body:',body)
     const entity = await this.tagModel
       .findById({ _id: id })
       .where({ is_deleted: { $ne: true } })

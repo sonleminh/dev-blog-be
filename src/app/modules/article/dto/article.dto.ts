@@ -55,6 +55,9 @@ export class UpdateArticleDto {
   @Length(1, 10000, { message: 'Độ dài đoạn tóm tắt từ 1-10000 ký tự!' })
   content: string;
 
+  @IsOptional()
+  thumbnail_image?: string | null;
+
   // @IsOptional()
   // @IsString()
   // @Length(0)
