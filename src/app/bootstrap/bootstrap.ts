@@ -25,7 +25,8 @@ export class App {
       origin: [
         'http://localhost:3000',
         'http://localhost:3030',
-        'https://dev-blog-fe.vercel.app/',
+        'https://devblogsite.vercel.app',
+        'https://dev-blog-admin.vercel.app'
       ],
       methods: 'GET, HEAD, PUT, POST, DELETE, OPTIONS, PATCH',
       credentials: true,
