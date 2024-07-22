@@ -22,7 +22,11 @@ export class App {
     );
     app.use(helmet());
     app.enableCors({
-      origin: ['http://localhost:3000', 'http://localhost:3030'],
+      origin: [
+        'http://localhost:3000',
+        'http://localhost:3030',
+        'https://dev-blog-fe.vercel.app/',
+      ],
       methods: 'GET, HEAD, PUT, POST, DELETE, OPTIONS, PATCH',
       credentials: true,
       allowedHeaders: 'Content-Type, Authorization',
