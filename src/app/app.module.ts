@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { configurations } from './config/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { MongooseModule } from '@nestjs/mongoose';
+
 import { DbConfigKey, IDbConfig } from './config/database.config';
+import { configurations } from './config/config';
+
+import { GoogleAnalyticsModule } from './modules/google-analytics/google-analytics.module';
+import { CategoryModule } from './modules/category/category.module';
+import { ArticleModule } from './modules/article/article.module';
+import { UploadModule } from './modules/upload/upload.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
-import { ArticleModule } from './modules/article/article.module';
-import { CategoryModule } from './modules/category/category.module';
 import { TagModule } from './modules/tag/tag.module';
-import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -44,6 +47,7 @@ import { UploadModule } from './modules/upload/upload.module';
     CategoryModule,
     TagModule,
     UploadModule,
+    GoogleAnalyticsModule,
   ],
 })
 export class AppModule {}
