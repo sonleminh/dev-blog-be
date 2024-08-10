@@ -1,23 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { google } from 'googleapis';
-import * as fs from 'fs';
+// import * as fs from 'fs';
 import { BetaAnalyticsDataClient } from '@google-analytics/data';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GoogleAnalyticsService {
   private readonly jwtClient: any;
   private readonly analyticsDataClient: BetaAnalyticsDataClient;
 
-  constructor() {
-    const data = JSON.parse(fs.readFileSync('service-account.json', 'utf8'));
+  constructor(private configService: ConfigService) {
+    // const data = JSON.parse(fs.readFileSync('service-account.json', 'utf8'));
 
     this.jwtClient = new google.auth.JWT({
-      email: data.client_email,
-      key: data.private_key,
+      email: this.configService.get('GA_CLIENT_EMAIL'),
+      key: this.configService.get('GA_PRIVATE_KEY'),
       scopes: ['https://www.googleapis.com/auth/analytics.readonly'],
     });
     this.analyticsDataClient = new BetaAnalyticsDataClient({
-      credentials: data,
+      credentials: {
+        type: this.configService.get('GA_TYPE'),
+        project_id: this.configService.get('GA_PROJECT_ID'),
+        private_key_id: this.configService.get('GA_PRIVATE_KEY_ID'),
+        private_key: this.configService.get('GA_PRIVATE_KEY'),
+        client_email: this.configService.get('GA_CLIENT_EMAIL'),
+        client_id: this.configService.get('GA_CLIENT_ID'),
+        token_url: this.configService.get('GA_TOKEN_URI'),
+        universe_domain: this.configService.get('GA_UNIVERSE_DOMAIN'),
+      },
     });
   }
 

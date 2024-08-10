@@ -30,16 +30,16 @@ export type IFirebaseConfig = {
 
 export default registerAs('', () => ({
   [FirebaseConfigKey.TYPE]: process.env[FirebaseConfigKey.TYPE],
-  [FirebaseConfigKey.PROJECT_ID]: process.env[FirebaseConfigKey.TYPE],
-  [FirebaseConfigKey.PRIVATE_KEY_ID]: process.env[FirebaseConfigKey.TYPE],
-  [FirebaseConfigKey.PRIVATE_KEY]: process.env[FirebaseConfigKey.TYPE],
-  [FirebaseConfigKey.CLIENT_EMAIL]: process.env[FirebaseConfigKey.TYPE],
-  [FirebaseConfigKey.CLIENT_ID]: process.env[FirebaseConfigKey.TYPE],
-  [FirebaseConfigKey.AUTH_URI]: process.env[FirebaseConfigKey.TYPE],
-  [FirebaseConfigKey.TOKEN_URI]: process.env[FirebaseConfigKey.TYPE],
-  [FirebaseConfigKey.AUTH_CERT_URL]: process.env[FirebaseConfigKey.TYPE],
-  [FirebaseConfigKey.CLIENT_CERT_URL]: process.env[FirebaseConfigKey.TYPE],
-  [FirebaseConfigKey.UNIVERSAL_DOMAIN]: process.env[FirebaseConfigKey.TYPE],
+  [FirebaseConfigKey.PROJECT_ID]: process.env[FirebaseConfigKey.PROJECT_ID],
+  [FirebaseConfigKey.PRIVATE_KEY_ID]: process.env[FirebaseConfigKey.PRIVATE_KEY_ID],
+  [FirebaseConfigKey.PRIVATE_KEY]: process.env[FirebaseConfigKey.PRIVATE_KEY],
+  [FirebaseConfigKey.CLIENT_EMAIL]: process.env[FirebaseConfigKey.CLIENT_EMAIL],
+  [FirebaseConfigKey.CLIENT_ID]: process.env[FirebaseConfigKey.CLIENT_ID],
+  [FirebaseConfigKey.AUTH_URI]: process.env[FirebaseConfigKey.AUTH_URI],
+  [FirebaseConfigKey.TOKEN_URI]: process.env[FirebaseConfigKey.TOKEN_URI],
+  [FirebaseConfigKey.AUTH_CERT_URL]: process.env[FirebaseConfigKey.AUTH_CERT_URL],
+  [FirebaseConfigKey.CLIENT_CERT_URL]: process.env[FirebaseConfigKey.CLIENT_CERT_URL],
+  [FirebaseConfigKey.UNIVERSAL_DOMAIN]: process.env[FirebaseConfigKey.UNIVERSAL_DOMAIN],
 }));
 
 // export const firebaseConfig = {

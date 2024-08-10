@@ -14,7 +14,7 @@ export class FirebaseService {
       project_id: this.configService.get('PROJECT_ID'),
       private_key_id: this.configService.get('PRIVATE_KEY_ID'),
       private_key: this.configService.get('PRIVATE_KEY'),
-      client_email: this.configService.get('CLIENT_MAIL'),
+      client_email: this.configService.get('CLIENT_EMAIL'),
       client_id: this.configService.get('CLIENT_ID'),
       auth_uri: this.configService.get('AUTH_URI'),
       token_uri: this.configService.get('TOKEN_URI'),
