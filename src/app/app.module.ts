@@ -19,7 +19,7 @@ import { TagModule } from './modules/tag/tag.module';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [...configurations],
-      envFilePath: ['.env.local'],
+      envFilePath: ['.env'],
     }),
     ThrottlerModule.forRoot({
       throttlers: [{ ttl: 10, limit: 200 }],

@@ -15,17 +15,17 @@ export enum FirebaseConfigKey {
 }
 
 export type IFirebaseConfig = {
-  [FirebaseConfigKey.TYPE]: string;
-  [FirebaseConfigKey.PROJECT_ID]: string;
-  [FirebaseConfigKey.PRIVATE_KEY_ID]: string;
-  [FirebaseConfigKey.PRIVATE_KEY]: string;
-  [FirebaseConfigKey.CLIENT_EMAIL]: string;
-  [FirebaseConfigKey.CLIENT_ID]: string;
-  [FirebaseConfigKey.AUTH_URI]: string;
-  [FirebaseConfigKey.TOKEN_URI]: string;
-  [FirebaseConfigKey.AUTH_CERT_URL]: string;
-  [FirebaseConfigKey.CLIENT_CERT_URL]: string;
-  [FirebaseConfigKey.UNIVERSAL_DOMAIN]: string;
+  [FirebaseConfigKey.TYPE]: string | undefined;
+  [FirebaseConfigKey.PROJECT_ID]: string | undefined;
+  [FirebaseConfigKey.PRIVATE_KEY_ID]: string | undefined;
+  [FirebaseConfigKey.PRIVATE_KEY]: string | undefined;
+  [FirebaseConfigKey.CLIENT_EMAIL]: string | undefined;
+  [FirebaseConfigKey.CLIENT_ID]: string | undefined;
+  [FirebaseConfigKey.AUTH_URI]: string | undefined;
+  [FirebaseConfigKey.TOKEN_URI]: string | undefined;
+  [FirebaseConfigKey.AUTH_CERT_URL]: string | undefined;
+  [FirebaseConfigKey.CLIENT_CERT_URL]: string | undefined;
+  [FirebaseConfigKey.UNIVERSAL_DOMAIN]: string | undefined;
 };
 
 export default registerAs('', () => ({
