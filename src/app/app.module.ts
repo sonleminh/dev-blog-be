@@ -6,7 +6,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { DbConfigKey, IDbConfig } from './config/database.config';
 import { configurations } from './config/config';
 
-import { GoogleAnalyticsModule } from './modules/google-analytics/google-analytics.module';
 import { CategoryModule } from './modules/category/category.module';
 import { ArticleModule } from './modules/article/article.module';
 import { UploadModule } from './modules/upload/upload.module';
@@ -47,7 +46,6 @@ import { TagModule } from './modules/tag/tag.module';
     CategoryModule,
     TagModule,
     UploadModule,
-    GoogleAnalyticsModule,
   ],
 })
 export class AppModule {}

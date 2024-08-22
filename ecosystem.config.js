@@ -30,20 +30,6 @@ module.exports = {
         CLIENT_X509_CERT_URL:
           'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-4jhng%40dev-blog-7a694.iam.gserviceaccount.com',
         UNIVERSE_DOMAIN: 'googleapis.com',
-        GA_TYPE: 'service_account',
-        GA_PROJECT_ID: 'skillful-cosine-431217-f0',
-        GA_PRIVATE_KEY_ID: 'e288ad06d5e654a790de40739cd6f85e9b4c502f',
-        GA_PRIVATE_KEY:
-          '-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCQuHoIwbqA/uJ2\nDXnpoqGd9DzujviSSTEuDp3/l2dHkEgV5X8x4h4vKIREUdw45HjgZliJP6PIq7gE\nK6Hz/OyvEytpOjTpQR6L/xAANddf0s5vQAKFFBTyT2Wp2wLoBh41gs6SZaMsW5G+\nMg6obGPyV6Pf3mzDSe7S0nuTuY+NFF0dEXtYkQ49ojIYtsR8SCjZVcX9r4yg8zba\nt1P4QAgcFLv1OREZ/7UO9M/cgY9yek8fsp6kc7zL8zS6jTM/n+nl2XNnyQsl3I8d\nTb8wTGKdR+fl5tYNpl5gtEhMqJ7kaXl4VMTluxEulV4oAxaudyuLMVaUO0LB17hw\n8CDjMzrLAgMBAAECggEANqz7rgNDKykg9ejxfktrM/nqa1aootv0MKplFwNkia0B\nDwS9oWMEdFyiXA1xXi0zXdRM7s2UW2RFCY5SiZOs+BgN9pt/EgEAQXQD35B35kQG\nqhFM4mpL36APkLSlzHNDRoQ89yJfG4sc7PaMgyUwPYbO6u1lugJcsFnFRnJ8wZe2\nV2FkG4/7NYE38NOeevU7MMP1PEzDFE8kFl1rpSdV3oVmmaS+qguYFLOkZlUrIOp0\n5lQ8VpcJgePb8t2YfKJzNfMbjl2UZeQ/WZR4ZgjTfa7uxX9JKvKoIRqHLQxXk7EW\nIYuTkS/VTNdegwl8RSFcoO2cZHzyMlssTibtGKiBgQKBgQDKR51RVnzWgGbSJyvk\nAcHmjqgGgCHSL5Syxbdlu74O7zSxd0Mm96/Xb0B1qVmWNOGgCpEE4rbewhSZXjqZ\nOmS3i6Rx7apqO/BtLVTbPcK3JBloCVi4U2DaegZmAgVOxmgfKC+usIwM8BRJaCVS\nKI0mRwVdXA+ei9UFtVfECNh7EwKBgQC3J5dyahdKdWPuWyGr+EtNj8D1VaowN3JH\nzyxo9Rg7yELU0gvUpBElf9IzYvLbJwpbCXTy5LDfb2MN7ssU0+c+V36wPJGSkX6Q\noZo+vdYU8v6P3L2bmGbmX+katPjKncqo8mmFaK3qY5g00VGoP8wPVW+UHwL1sQiV\nr7vQPkxAaQKBgACPBBM2bu/UuPP5obhmfNebK0GhVvaSpRF9VE1WoGbAKGAZGTlh\nU73/k6j/h7zPdpQPk2j1C1ZAKPhndzf3HlIXc6PQ6TiT480ZY/ObDw+cbOmJpRIV\nQN45mgzsEoGuMJltbfxIhop+mz+8puW8MO+bIJuqZmykrDjw0EY9VAO7AoGAUpgG\nEdCJ5Ef/4pMyIgz8WGPFTl1tPAUlAgEJM+OjJAJxMOvv7dp26QQ1VHsArZdzcg5X\nsNk0ce4XK0dOSXwtwc1PEkaeFwyJmMtndXfCPPw/k7ylvK8DaExEIIkP0L9LjtiS\ngVjtZM+46cijHE54xUlv4coCWa2WA3qWJZiSZlECgYEAveCWT7uSrSzpVRhGPnku\nh2Q8uV7kh8hHcnZx1kdpCAGGvozQ6wfiX8sWAVI/3ZW3x97M3qxzxQhgfeSGS2ju\nnbcSJx5muXstxeLP4MlZ8P+4k0N5e3TONyydVVvJSUdlVcVycecKDO+qSM8Q5zEq\nuXEjQFr4b4GeeaimKvvh/Rs=\n-----END PRIVATE KEY-----\n',
-        GA_CLIENT_EMAIL:
-          'son-le@skillful-cosine-431217-f0.iam.gserviceaccount.com',
-        GA_CLIENT_ID: '102794356549661993639',
-        GA_AUTH_URI: 'https://accounts.google.com/o/oauth2/auth',
-        GA_TOKEN_URI: 'https://oauth2.googleapis.com/token',
-        GA_AUTH_PROVIDER_CERT_URL: 'https://www.googleapis.com/oauth2/v1/certs',
-        GA_CLIENT_CERT_URL:
-          'https://www.googleapis.com/robot/v1/metadata/x509/son-le%40skillful-cosine-431217-f0.iam.gserviceaccount.com',
-        GA_UNIVERSE_DOMAIN: 'googleapis.com',
       },
     },
   ],
