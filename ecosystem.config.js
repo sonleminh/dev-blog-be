@@ -8,7 +8,7 @@ module.exports = {
         MONGO_HOST: 'dev-blog.yryy5tp.mongodb.net',
         MONGO_USER: 'sonlele',
         MONGO_PASSWORD: 'devblognha',
-        API_PREFIX: '/admin/api',
+        API_PREFIX: '/api',
         AT_SECRET: 'devblogat',
         RT_SECRET: 'devblogrt',
         CK_PATH: '/auth/refresh-token',
