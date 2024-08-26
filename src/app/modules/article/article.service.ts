@@ -40,7 +40,6 @@ export class ArticleService {
           ],
         }),
       };
-      const { start } = getLast30DaysRange();
 
       const { resPerPage, passedPage } = paginateCalculator(page, limit);
 
@@ -142,10 +141,8 @@ export class ArticleService {
 
   async getTrending() {
     try {
-      const { start, end } = getLast30DaysRange();
       const key = {
         is_deleted: { $ne: true },
-        createdAt: { $gte: start, $lte: end },
       };
 
       const [res, total] = await Promise.all([
