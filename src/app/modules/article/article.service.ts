@@ -60,11 +60,7 @@ export class ArticleService {
                 { $match: { 'tags.value': 'back-end' } },
                 { $limit: 6 },
               ],
-              trending_articles: [
-                { $match: { createdAt: { $gte: start } } },
-                { $sort: { views: -1 } },
-                { $limit: 4 },
-              ],
+              trending_articles: [{ $sort: { views: -1 } }, { $limit: 4 }],
             },
           },
         ];
