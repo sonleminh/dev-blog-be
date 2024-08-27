@@ -46,6 +46,11 @@ export class ArticleController {
     return await this.articleService.getInitialArticleForCreate();
   }
 
+  @Get('related')
+  async getRelatedArticle() {
+    return this.articleService.getRelated();
+  }
+
   @Get(':id')
   async getArticleById(@Param('id') id: Types.ObjectId) {
     return this.articleService.getArticleById(id);

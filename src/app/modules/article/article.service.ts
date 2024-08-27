@@ -10,7 +10,6 @@ import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 import { FirebaseService } from '../firebase/firebase.service';
 import { paginateCalculator } from 'src/app/utils/page-helpers';
 import { TagService } from '../tag/tag.service';
-import getLast30DaysRange from 'src/app/utils/getCurrentMonthRange';
 import { escapeRegExp } from 'src/app/utils/escapeRegExp';
 
 @Injectable()
@@ -173,6 +172,18 @@ export class ArticleService {
       return article;
     } catch (error) {
       throw new NotFoundException('Không tìm thấy bài viết!');
+    }
+  }
+
+  async getRelated() {
+    try {
+      const key = {
+        is_deleted: { $ne: true },
+      };
+      const res = await this.articleModel.find(key).limit(6).lean().exec();
+      return { articleList: res };
+    } catch (error) {
+      throw new BadRequestException(error);
     }
   }
 
